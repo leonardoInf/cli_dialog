@@ -1,7 +1,7 @@
 import 'package:test/test.dart';
 import 'package:cli_dialog/src/list_chooser.dart';
-import 'package:cli_dialog/src/services.dart';
 import 'package:cli_dialog/src/xterm.dart';
+import 'test_utils.dart';
 
 void main() {
   StdinService std_input;
@@ -18,17 +18,39 @@ void main() {
     std_input.addToBuffer(
         [...Keys.arrowDown, ...Keys.arrowDown, ...Keys.arrowDown, Keys.enter]);
     var chooser = ListChooser.std(std_input, std_output, options);
-    var expectedStdout = getMarkedStdout(options, 3);
+    var expectedStdout = markedList(options, 3);
 
     expect(chooser.choose(), equals('D'));
-    expect(std_output.getOutput(), equals(expectedStdout));
+    expect(std_output.getStringOutput(), equals(expectedStdout));
   });
 
-  test('Many options', () {});
+  test('Only one option', () {
+    options = ['A'];
+    std_input.addToBuffer(Keys.enter);
+    var chooser = ListChooser.std(std_input, std_output, options);
+    var expectedOutput = markedList(options, 0);
 
-  test('Only one option', () {});
+    expect(chooser.choose(), equals('A'));
+    expect(std_output.getStringOutput(), equals(expectedOutput));
+  });
 
-  test('Throws exception if no option is given', () {});
+  test('Many options', () {
+    options = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+    var elements = [];
+    for(var i=0; i<11; i++){
+      elements.addAll([...Keys.arrowDown]); // it is a single element but it must be in a list for the spread operator to work
+    }
+    std_input.addToBuffer([...elements, Keys.enter]);
+    var chooser = ListChooser.std(std_input, std_output, options);
+    var expectedOutput = markedList(options, 11);
+
+    expect(chooser.choose(), equals('L'));
+    expect(std_output.getStringOutput(), equals(expectedOutput));
+  });
+
+  test('Throws exception if no option is given', () {
+    expect(() => ListChooser.std(std_input, std_output, null), throwsA(predicate((e) => e is ArgumentError && e.message == 'No options for list dialog given')));
+  });
 
   test('Upper bound is respected', () {
     std_input.addToBuffer([
@@ -40,7 +62,10 @@ void main() {
       Keys.enter
     ]);
     var chooser = ListChooser.std(std_input, std_output, options);
+    var expectedStdout = markedList(options, 0);
+
     expect(chooser.choose(), equals('A'));
+    expect(std_output.getStringOutput(), equals(expectedStdout));
   });
 
   test('Lower bound is respected', () {
@@ -53,18 +78,9 @@ void main() {
       Keys.enter
     ]);
     var chooser = ListChooser.std(std_input, std_output, options);
+    var expectedStdout = markedList(options, 3);
+
     expect(chooser.choose(), equals('D'));
+    expect(std_output.getStringOutput(), equals(expectedStdout));
   });
-}
-
-String getMarkedStdout(options, index) {
-  var output = StringBuffer();
-
-  for (var i = 0; i < options.length; i++) {
-    if (i == index)
-      output.writeln(XTerm.teal(options[i]));
-    else
-      output.writeln(options[i]);
-  }
-  return output.toString();
 }

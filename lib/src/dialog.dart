@@ -9,20 +9,20 @@ class CLI_Dialog {
   List<List<String>> questions;
   List<List<String>> booleanQuestions;
   List listQuestions;
-  //TODO: implement order
   List<String> order;
   var std_input = StdinService();
   var std_output = StdoutService();
 
-  CLI_Dialog({this.questions, this.booleanQuestions, this.listQuestions});
+  CLI_Dialog(
+      {this.questions, this.booleanQuestions, this.listQuestions, this.order});
   CLI_Dialog.std(this.std_input, this.std_output,
-      {this.questions, this.booleanQuestions, this.listQuestions});
+      {this.questions, this.booleanQuestions, this.listQuestions, this.order});
 
   String comment(str) => XTerm.gray(str);
 
-  String _question(str) => XTerm.green('? ') + XTerm.bold(str) + ' ';
+  String _question(str) => XTerm.green('?') + ' ' + XTerm.bold(str) + ' ';
 
-  String _booleanQuestion(str) => _question(str) + comment('(y/N) ');
+  String _booleanQuestion(str) => _question(str) + comment('(y/N)') + ' ';
 
   String _listQuestion(str) => _question(str) + comment('(Use arrow keys)');
 
@@ -94,18 +94,59 @@ class CLI_Dialog {
 
   Map ask() {
     if (order == null) {
-      // Standard behaviour if no order is given
-      for (var i = 0; i < getSize(questions); i++) {
-        _askQuestion(questions[i][0], questions[i][1]);
+      standardOrder();
+    } else {
+      for (var i = 0; i < order.length; i++) {
+        final questionAndFunction = findQuestion(order[i]);
+        if (questionAndFunction != null) {
+          questionAndFunction[1](
+              questionAndFunction[0][0], questionAndFunction[0][1]);
+        }
       }
-      for (var i = 0; i < getSize(booleanQuestions); i++) {
-        _askBooleanQuestion(booleanQuestions[i][0], booleanQuestions[i][1]);
-      }
-      for (var i = 0; i < getSize(listQuestions); i++) {
-        _askListQuestion(listQuestions[i][0], listQuestions[i][1]);
-      }
-    } else {}
+    }
 
     return answers;
+  }
+
+  // Standard behaviour if no order is given
+  void standardOrder() {
+    for (var i = 0; i < getSize(questions); i++) {
+      _askQuestion(questions[i][0], questions[i][1]);
+    }
+    for (var i = 0; i < getSize(booleanQuestions); i++) {
+      _askBooleanQuestion(booleanQuestions[i][0], booleanQuestions[i][1]);
+    }
+    for (var i = 0; i < getSize(listQuestions); i++) {
+      _askListQuestion(listQuestions[i][0], listQuestions[i][1]);
+    }
+  }
+
+  dynamic findQuestion(key) {
+    dynamic ret;
+    [
+      [questions, _askQuestion],
+      [booleanQuestions, _askBooleanQuestion],
+      [listQuestions, _askListQuestion]
+    ].forEach((element) {
+      if (element[0] != null) {
+        var retVal = search(element[0], element[1], key);
+        if (retVal != null) {
+          ret = retVal;
+          return;
+        }
+      }
+    });
+    return ret;
+  }
+
+  dynamic search(list, fn, key) {
+    dynamic ret;
+    list.forEach((element) {
+      if (element[1] == key) {
+        ret = [element, fn];
+        return;
+      }
+    });
+    return ret;
   }
 }

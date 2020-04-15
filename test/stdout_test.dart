@@ -6,7 +6,7 @@ void main() {
   test('Basic functionality', () {
     var std_output = StdoutService(isMock: true);
     std_output.writeln(
-        'First line${XTerm.blankRemaining()}!!!\n??${XTerm.moveUp(1)}Go\n');
+        'First line${XTerm.blankRemaining()}\n??${XTerm.moveUp(1)}Go\n');
     std_output.writeln('Second line');
     expect(std_output.getOutput(), equals(['Gorst line', '??', 'Second line']));
   });

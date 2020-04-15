@@ -1,11 +1,11 @@
 import 'package:test/test.dart';
 import 'package:cli_dialog/cli_dialog.dart';
-import 'package:cli_dialog/src/services.dart';
+import 'test_utils.dart';
 
 void main() {
   test('Main functionality', () {
-    var std_input = StdinService(isMock: true);
     var std_output = StdoutService(isMock: true);
+    var std_input = StdinService(isMock: true, informStdout: std_output);
 
     //key codes
     const enter = 10;
@@ -23,13 +23,6 @@ void main() {
       enter
     ]);
 
-    var expectedOutput = {
-      'project_name': 'My project',
-      'routing': false,
-      'stylesheet':
-          'Less   [ http://lesscss.org                                             ]'
-    };
-
     var questions = [
       ['What name would you like to use for the project?', 'project_name']
     ];
@@ -37,21 +30,37 @@ void main() {
       ['Would you like to add AngularDart routing?', 'routing']
     ];
 
+    var listQuestion = 'Which stylesheet format would you like to use?';
+
+    var options =  [
+    'CSS',
+    'SCSS   [ https://sass-lang.com/documentation/syntax#scss                ]',
+    'Sass   [ https://sass-lang.com/documentation/syntax#the-indented-syntax ]',
+    'Less   [ http://lesscss.org                                             ]',
+    'Stylus [ http://stylus-lang.com                                         ]'
+    ];
+
     var listQuestions = [
       [
         {
-          'question': 'Which stylesheet format would you like to use?',
-          'options': [
-            'CSS',
-            'SCSS   [ https://sass-lang.com/documentation/syntax#scss                ]',
-            'Sass   [ https://sass-lang.com/documentation/syntax#the-indented-syntax ]',
-            'Less   [ http://lesscss.org                                             ]',
-            'Stylus [ http://stylus-lang.com                                         ]'
-          ]
+          'question': listQuestion,
+          'options': options
         },
         'stylesheet'
       ]
     ];
+
+    var expectedAnswers = {
+      'project_name': 'My project',
+      'routing': false,
+      'stylesheet':
+      'Less   [ http://lesscss.org                                             ]'
+    };
+
+    var outputBuffer = StringBuffer();
+    outputBuffer.writeln(QnA(questions[0][0], expectedAnswers['project_name']));
+    outputBuffer.writeln(booleanQnA(booleanQuestions[0][0], 'No'));
+    outputBuffer.write(questionNList(listQuestion, options, 3));
 
     expect(
         CLI_Dialog.std(std_input, std_output,
@@ -59,6 +68,8 @@ void main() {
                 booleanQuestions: booleanQuestions,
                 listQuestions: listQuestions)
             .ask(),
-        equals(expectedOutput));
+        equals(expectedAnswers));
+
+    expect(std_output.getStringOutput(), equals(outputBuffer.toString()));
   });
 }

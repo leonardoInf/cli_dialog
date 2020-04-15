@@ -1,6 +1,13 @@
 import 'package:cli_dialog/cli_dialog.dart';
 
-dynamic runExample([mockStdin, mockStdout]) {
+dynamic runExample([stdin_service, stdout_service]) {
+  if(stdin_service == null){
+    stdin_service = StdinService();
+  }
+  if(stdout_service == null){
+    stdout_service = StdoutService;
+  }
+
   var questions = [
     ['What name would you like to use for the project?', 'project_name']
   ];
@@ -24,18 +31,11 @@ dynamic runExample([mockStdin, mockStdout]) {
     ]
   ];
 
-  CLI_Dialog dialog;
-  if (mockStdin == null) {
-    dialog = CLI_Dialog(
+  CLI_Dialog dialog = CLI_Dialog.std(stdin_service, stdout_service,
         questions: questions,
         booleanQuestions: booleanQuestions,
         listQuestions: listQuestions);
-  } else {
-    dialog = CLI_Dialog.std(mockStdin, mockStdout,
-        questions: questions,
-        booleanQuestions: booleanQuestions,
-        listQuestions: listQuestions);
-  }
+
   return dialog.ask();
 }
 

@@ -72,13 +72,13 @@ class StdoutService {
   }
 
   void _addChar() {
-      var currLine = output[cursor['y']].split('');
-      if (cursor['x'] < currLine.length) {
-        currLine.removeAt(cursor['x']);
-        currLine.insert(cursor['x'], buffer[0]);
-      } else
-        currLine.add(buffer[0]);
-      output[cursor['y']] = currLine.join('');
+    var currLine = output[cursor['y']].split('');
+    if (cursor['x'] < currLine.length) {
+      currLine.removeAt(cursor['x']);
+      currLine.insert(cursor['x'], buffer[0]);
+    } else
+      currLine.add(buffer[0]);
+    output[cursor['y']] = currLine.join('');
     cursor['x'] += 1;
   }
 
@@ -124,8 +124,11 @@ class StdoutService {
     }
     if (RegExp(r'\[\dA').hasMatch(sequence)) {
       cursor['x'] = 0;
-      cursor['y'] -=
+      var stepsUp =
           int.parse(RegExp(r'\[\dA').firstMatch(sequence).group(0)[1]);
+      if (cursor['y'] - stepsUp >= 0) {
+        cursor['y'] -= stepsUp;
+      }
       return true;
     }
     return false;

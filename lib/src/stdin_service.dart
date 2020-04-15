@@ -32,6 +32,7 @@ class StdinService {
   }
 
   void addToBuffer(elements) {
-    _mockBuffer.addAll(elements);
+    if(elements is Iterable) _mockBuffer.addAll(elements);
+    else _mockBuffer.add(elements); // that is, if it is only one element
   }
 }
