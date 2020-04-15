@@ -4,19 +4,17 @@ import 'xterm.dart';
 
 class ListChooser {
   List<String> items;
-  var std_input = StdinService();
-  var std_output = StdoutService();
 
   ListChooser(this.items) {
     _checkItems();
+    //relevant when running from IntelliJ console pane for example
     if (stdin.hasTerminal) {
-      //relevant when running from IntelliJ console pane for example
       stdin.echoMode = false;
       stdin.lineMode = false;
     }
   }
 
-  ListChooser.std(this.std_input, this.std_output, this.items) {
+  ListChooser.std(this._std_input, this._std_output, this.items) {
     _checkItems();
     if (stdin.hasTerminal) {
       stdin.echoMode = false;
@@ -48,15 +46,18 @@ class ListChooser {
 
   // END OF PUBLIC API
 
-  void _checkItems(){
-    if(items == null){
+  var _std_input = StdinService();
+  var _std_output = StdoutService();
+
+  void _checkItems() {
+    if (items == null) {
       throw ArgumentError('No options for list dialog given');
     }
   }
 
   void _deletePreviousList() {
     for (var i = 0; i < items.length; i++) {
-      std_output.write(XTerm.moveUp(1) + XTerm.blankRemaining());
+      _std_output.write(XTerm.moveUp(1) + XTerm.blankRemaining());
     }
   }
 
@@ -66,10 +67,10 @@ class ListChooser {
     }
     for (var i = 0; i < items.length; i++) {
       if (i == index) {
-        std_output.writeln(XTerm.rightIndicator() + ' ' + XTerm.teal(items[i]));
+        _std_output.writeln(XTerm.rightIndicator() + ' ' + XTerm.teal(items[i]));
         continue;
       }
-      std_output.writeln('  ' + items[i]);
+      _std_output.writeln('  ' + items[i]);
     }
   }
 
@@ -83,10 +84,10 @@ class ListChooser {
 
   int _userInput() {
     for (var i = 0; i < 2; i++) {
-      if (std_input.readByteSync() == 10) {
+      if (_std_input.readByteSync() == 10) {
         return 10;
       }
     }
-    return std_input.readByteSync();
+    return _std_input.readByteSync();
   }
 }

@@ -1,10 +1,10 @@
 import 'package:cli_dialog/cli_dialog.dart';
 
 dynamic runExample([stdin_service, stdout_service]) {
-  if(stdin_service == null){
+  if (stdin_service == null) {
     stdin_service = StdinService();
   }
-  if(stdout_service == null){
+  if (stdout_service == null) {
     stdout_service = StdoutService;
   }
 
@@ -32,9 +32,9 @@ dynamic runExample([stdin_service, stdout_service]) {
   ];
 
   CLI_Dialog dialog = CLI_Dialog.std(stdin_service, stdout_service,
-        questions: questions,
-        booleanQuestions: booleanQuestions,
-        listQuestions: listQuestions);
+      questions: questions,
+      booleanQuestions: booleanQuestions,
+      listQuestions: listQuestions);
 
   return dialog.ask();
 }

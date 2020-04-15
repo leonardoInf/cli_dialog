@@ -5,10 +5,16 @@ import 'package:cli_dialog/src/stdout_service.dart';
 
 class StdinService {
   bool isMock;
-  var _mockBuffer = [];
   StdoutService informStdout;
 
   StdinService({this.isMock: false, this.informStdout});
+
+  void addToBuffer(elements) {
+    if (elements is Iterable)
+      _mockBuffer.addAll(elements);
+    else
+      _mockBuffer.add(elements); // that is, if it is only one element
+  }
 
   int readByteSync() {
     if (isMock) {
@@ -31,8 +37,7 @@ class StdinService {
     return stdin.readLineSync(encoding: encoding);
   }
 
-  void addToBuffer(elements) {
-    if(elements is Iterable) _mockBuffer.addAll(elements);
-    else _mockBuffer.add(elements); // that is, if it is only one element
-  }
+  // END OF PUBLIC API
+
+  var _mockBuffer = [];
 }

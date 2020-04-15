@@ -14,7 +14,7 @@ void main() {
 
     std_input.addToBuffer([
       'My project\n',
-      "No\n",
+      'No\n',
       ...arrowDown,
       ...arrowDown,
       ...arrowDown,
@@ -32,33 +32,30 @@ void main() {
 
     var listQuestion = 'Which stylesheet format would you like to use?';
 
-    var options =  [
-    'CSS',
-    'SCSS   [ https://sass-lang.com/documentation/syntax#scss                ]',
-    'Sass   [ https://sass-lang.com/documentation/syntax#the-indented-syntax ]',
-    'Less   [ http://lesscss.org                                             ]',
-    'Stylus [ http://stylus-lang.com                                         ]'
+    var options = [
+      'CSS',
+      'SCSS   [ https://sass-lang.com/documentation/syntax#scss                ]',
+      'Sass   [ https://sass-lang.com/documentation/syntax#the-indented-syntax ]',
+      'Less   [ http://lesscss.org                                             ]',
+      'Stylus [ http://stylus-lang.com                                         ]'
     ];
 
     var listQuestions = [
       [
-        {
-          'question': listQuestion,
-          'options': options
-        },
+        {'question': listQuestion, 'options': options},
         'stylesheet'
       ]
     ];
 
-    var expectedAnswers = {
+    var expectedAnswer = {
       'project_name': 'My project',
       'routing': false,
       'stylesheet':
-      'Less   [ http://lesscss.org                                             ]'
+          'Less   [ http://lesscss.org                                             ]'
     };
 
     var outputBuffer = StringBuffer();
-    outputBuffer.writeln(QnA(questions[0][0], expectedAnswers['project_name']));
+    outputBuffer.writeln(QnA(questions[0][0], expectedAnswer['project_name']));
     outputBuffer.writeln(booleanQnA(booleanQuestions[0][0], 'No'));
     outputBuffer.write(questionNList(listQuestion, options, 3));
 
@@ -68,7 +65,7 @@ void main() {
                 booleanQuestions: booleanQuestions,
                 listQuestions: listQuestions)
             .ask(),
-        equals(expectedAnswers));
+        equals(expectedAnswer));
 
     expect(std_output.getStringOutput(), equals(outputBuffer.toString()));
   });

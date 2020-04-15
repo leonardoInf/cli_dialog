@@ -4,8 +4,6 @@ import 'package:cli_dialog/src/xterm.dart';
 import '../../test/test_utils.dart';
 
 void main() {
-  var answers = {};
-
   test('Result', () {
     var mockStdout = StdoutService(isMock: true);
     var mockStdin = StdinService(isMock: true, informStdout: mockStdout);
@@ -24,34 +22,34 @@ void main() {
       'stylesheet':
           'SCSS   [ https://sass-lang.com/documentation/syntax#scss                ]'
     };
-    answers = runExample(mockStdin, mockStdout);
+    var answers = runExample(mockStdin, mockStdout);
     var outputBuffer = StringBuffer();
 
-    outputBuffer.writeln(QnA('What name would you like to use for the project?', 'Some project'));
-    outputBuffer.writeln(booleanQnA('Would you like to add AngularDart routing?', 'Yes'));
+    outputBuffer.writeln(QnA(
+        'What name would you like to use for the project?', 'Some project'));
+    outputBuffer.writeln(
+        booleanQnA('Would you like to add AngularDart routing?', 'Yes'));
 
     var items = [
-    'CSS',
-    'SCSS   [ https://sass-lang.com/documentation/syntax#scss                ]',
-    'Sass   [ https://sass-lang.com/documentation/syntax#the-indented-syntax ]',
-    'Less   [ http://lesscss.org                                             ]',
-    'Stylus [ http://stylus-lang.com                                         ]'
+      'CSS',
+      'SCSS   [ https://sass-lang.com/documentation/syntax#scss                ]',
+      'Sass   [ https://sass-lang.com/documentation/syntax#the-indented-syntax ]',
+      'Less   [ http://lesscss.org                                             ]',
+      'Stylus [ http://stylus-lang.com                                         ]'
     ];
 
-    outputBuffer.write(questionNList('Which stylesheet format would you like to use?', items, 1));
+    outputBuffer.write(questionNList(
+        'Which stylesheet format would you like to use?', items, 1));
 
-    var expectedOutput =  outputBuffer.toString();
+    var expectedOutput = outputBuffer.toString();
 
     expect(answers, equals(expectedAnswer));
     expect(mockStdout.getStringOutput(), equals(expectedOutput));
-  });
-
-  test('Reporting', () {
     expect(report(answers, do_print: false), equals('''
 
 Your project name is ${answers['project_name']}.
 You ${(answers['routing'] ? '' : 'do not ')}want to use routing.
 Your preferred stylesheet format is ${answers["stylesheet"].split(' ')[0]}.
-'''));
+''')); // Reporting
   });
 }

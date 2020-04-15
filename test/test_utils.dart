@@ -28,4 +28,10 @@ String QnA(question, answer) =>
     XTerm.green('?') + ' ' + XTerm.bold(question) + ' ' + XTerm.teal(answer);
 
 String questionNList(question, options, index) =>
-    XTerm.green('?') + ' ' + XTerm.bold(question) + ' ' + XTerm.gray('(Use arrow keys)') + '\n' + markedList(options, index);
+    XTerm.green('?') +
+    ' ' +
+    XTerm.bold(question) +
+    ' ' +
+    XTerm.gray('(Use arrow keys)') +
+    '\n' +
+    markedList(options, index);
