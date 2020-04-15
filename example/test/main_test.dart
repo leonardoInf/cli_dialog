@@ -25,7 +25,7 @@ void main() {
           'SCSS   [ https://sass-lang.com/documentation/syntax#scss                ]'
     };
     answers = runExample(mockStdin, mockStdout);
-    print(mockStdout.getOutput());
+    print(mockStdout.getStringOutput());
     expect(answers, equals(expectedOutput));
   });
 

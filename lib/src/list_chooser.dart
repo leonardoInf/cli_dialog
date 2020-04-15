@@ -8,13 +8,18 @@ class ListChooser {
   var std_output = StdoutService();
 
   ListChooser(this.items) {
-    stdin.echoMode = false;
-    stdin.lineMode = false;
+    if (stdin.hasTerminal) {
+      //relevant when running from IntelliJ console pane for example
+      stdin.echoMode = false;
+      stdin.lineMode = false;
+    }
   }
 
   ListChooser.std(this.std_input, this.std_output, this.items) {
-    stdin.echoMode = false;
-    stdin.lineMode = false;
+    if (stdin.hasTerminal) {
+      stdin.echoMode = false;
+      stdin.lineMode = false;
+    }
   }
 
   void deletePreviousList() {
@@ -24,8 +29,11 @@ class ListChooser {
   }
 
   void resetStdin() {
-    stdin.echoMode = true;
-    stdin.lineMode = true;
+    if (stdin.hasTerminal) {
+      //see default ctor
+      stdin.echoMode = true;
+      stdin.lineMode = true;
+    }
   }
 
   void renderList(index, {initial: false}) {

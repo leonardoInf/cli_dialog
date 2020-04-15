@@ -23,7 +23,7 @@ class StdinService {
     if (isMock) {
       var ret = _mockBuffer[0];
       _mockBuffer.removeAt(0);
-      if (informStdout != null && stdin.echoMode) {
+      if (informStdout != null) {
         informStdout.write(ret);
       }
       return ret;

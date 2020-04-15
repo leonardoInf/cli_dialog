@@ -1,9 +1,7 @@
 import 'dart:io';
-import 'package:cli_dialog/src/xterm.dart';
 
 class StdoutService {
   bool isMock;
-  bool ignoreChars = false;
   var buffer = '';
   var output = [''];
   var cursor = {'x': 0, 'y': 0};
@@ -29,13 +27,17 @@ class StdoutService {
   }
 
   //Remove blank lines at the end
-  List getOutput(){
+  List getOutput() {
     List ret = [];
     output.forEach((element) {
-      if(element.length > 0){ret.add(element);}
+      if (element.length > 0) {
+        ret.add(element);
+      }
     });
     return ret;
   }
+
+  String getStringOutput() => getOutput().join('\n');
 
   // END OF PUBLIC API
 
@@ -44,33 +46,40 @@ class StdoutService {
 
     for (var i = 0; i < _buffer.length; i++) {
       var utf16char = _buffer[i];
-      if (utf16char == '\n') {
-        _handleNewline();
-      } else if (utf16char == '\u001b') {
-        // \u001b = \e (in UTF-16)
-        _handleEscapeSequence();
-        var toSkip = _removeSequenceFromBuffer();
-        i += toSkip;
-        continue;
-      } else {
-        _addChar();
-        cursor['x'] += 1;
+
+      switch (utf16char) {
+        case '\n':
+          _handleNewline();
+          break;
+        case '\r':
+          _handleCarriageReturn();
+          break;
+        case '\u001b':
+          var found = _handleEscapeSequence();
+          if (found) {
+            var toSkip = _removeSequenceFromBuffer();
+            i += toSkip;
+            continue;
+          } else {
+            _addChar();
+          }
+          break;
+        default:
+          _addChar();
       }
       _removeCharFromBuffer();
     }
   }
 
   void _addChar() {
-    if (!ignoreChars) {
       var currLine = output[cursor['y']].split('');
-      if (cursor['x'] < currLine.length){
+      if (cursor['x'] < currLine.length) {
         currLine.removeAt(cursor['x']);
         currLine.insert(cursor['x'], buffer[0]);
-      }
-      else
+      } else
         currLine.add(buffer[0]);
       output[cursor['y']] = currLine.join('');
-    }
+    cursor['x'] += 1;
   }
 
   void _removeCharFromBuffer() {
@@ -86,11 +95,14 @@ class StdoutService {
     return delimIndex;
   }
 
-  void _handleNewline(){
+  void _handleNewline() {
     output.add('');
     cursor['x'] = 0;
     cursor['y'] += 1;
-    ignoreChars = false;
+  }
+
+  void _handleCarriageReturn() {
+    cursor['x'] = 0;
   }
 
   // not all escape sequences have the m delimiter
@@ -102,16 +114,20 @@ class StdoutService {
     return 0;
   }
 
-  void _handleEscapeSequence() {
+  bool _handleEscapeSequence() {
     final sequence = buffer.substring(1, _getDelimiterIndex() + 1);
 
-    if(sequence == '[0K'){  //blank remaning
-      ignoreChars = true;
+    if (sequence == '[0K') {
+      //blank remaning
+      output[cursor['y']] = output[cursor['y']].substring(0, cursor['x']);
+      return true;
     }
-    if(RegExp(r'\[\dA').hasMatch(sequence)){
-      ignoreChars = false;
+    if (RegExp(r'\[\dA').hasMatch(sequence)) {
       cursor['x'] = 0;
-      cursor['y'] -= int.parse(RegExp(r'\[\dA').firstMatch(sequence).group(0)[1]);
+      cursor['y'] -=
+          int.parse(RegExp(r'\[\dA').firstMatch(sequence).group(0)[1]);
+      return true;
     }
+    return false;
   }
 }
