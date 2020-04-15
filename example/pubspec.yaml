@@ -1,0 +1,19 @@
+name: example
+description: A dialog asking the same questions as ng new when creating a new workspace/project
+version: 1.0.0
+author: Leonardo Braguinski <leo.braguinski@gmail.com>
+
+environment:
+  sdk: ">=2.3.0 <3.0.0"
+
+dependencies:
+  cli_dialog:
+
+dev_dependencies:
+  test: ^1.14.2
+
+dependency_overrides:
+  cli_dialog:
+    path: ../
+
+
