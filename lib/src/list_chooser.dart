@@ -2,9 +2,13 @@ import 'dart:io';
 import 'services.dart';
 import 'xterm.dart';
 
+/// Implementation of list questions. Can be used without [CLI_Dialog].
 class ListChooser {
+  /// The options which are presented to the user
   List<String> items;
 
+  /// Default constructor for the list chooser.
+  /// It is as simple as passing your [items] as a List of strings
   ListChooser(this.items) {
     _checkItems();
     //relevant when running from IntelliJ console pane for example
@@ -14,6 +18,8 @@ class ListChooser {
     }
   }
 
+  /// Named constructor mostly for unit testing.
+  /// For context and an example see [CLI_Dialog], `README.md` and the `test/` folder.
   ListChooser.std(this._std_input, this._std_output, this.items) {
     _checkItems();
     if (stdin.hasTerminal) {
@@ -22,6 +28,7 @@ class ListChooser {
     }
   }
 
+  /// Similar to [ask] this actually triggers the dialog and returns the chosen item = option.
   String choose() {
     int input;
     int index = 0;

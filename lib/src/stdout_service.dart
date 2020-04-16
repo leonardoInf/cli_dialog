@@ -1,10 +1,15 @@
 import 'dart:io';
 
+/// Service to simulate stdout. Use it in unit tests.
 class StdoutService {
+  /// Indicates if this StdoutService is mock mode, see also [StdinService].
   bool mock;
 
+  /// The default and only constructor where you can indicate
+  // if your stdout should be in [mock] mode.
   StdoutService({this.mock = false});
 
+  /// Use this to write a string, whether in [mock] mode or with real stdout.
   void write(str) {
     if (mock) {
       _buffer += str;
@@ -14,6 +19,8 @@ class StdoutService {
     }
   }
 
+  /// Use this to write a string with a trailing newline ('\n').
+  /// Whether in [mock] mode or with real stdout.
   void writeln(str) {
     if (mock) {
       _buffer += str + '\n';
@@ -23,7 +30,9 @@ class StdoutService {
     }
   }
 
-  //Remove blank lines at the end
+  /// This returns the stdout as a list.
+  /// Empty strings at the end are removed.
+  /// For a string version see [getStringOutput]
   List getOutput() {
     List ret = [];
     _output.forEach((element) {
@@ -34,6 +43,8 @@ class StdoutService {
     return ret;
   }
 
+  /// Calls [getOutput] and joins the returned list using the
+  /// newline character ('\n').
   String getStringOutput() => getOutput().join('\n');
 
   // END OF PUBLIC API

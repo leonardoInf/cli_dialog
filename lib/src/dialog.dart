@@ -4,18 +4,23 @@ export 'list_chooser.dart';
 import 'services.dart';
 import 'xterm.dart';
 
-/// This is the most important class which should usually be instantiated when builing CLI dialogs.
+/// This is the most important class which should usually be instantiated when building CLI dialogs.
 class CLI_Dialog {
   /// This is where the results = answers from the CLI dialog go. This map is updated and returned when calling [ask].
   Map answers = {};
+
   /// This is where the boolean questions are stored during runtime. Feel free to access it like any other list.
   List<List<String>> booleanQuestions;
+
   /// This is where the list questions are stored during runtime (where the user selects a value). Feel free to access it like any other list.
   List listQuestions;
+
   /// This list contains the order in which the questions are asked in the dialog. Feel free to access it like any other list.
   List<String> order;
+
   /// This is where the regular questions are stored during runtime.
   List<List<String>> questions;
+
   /// Indicates the default behaviour of boolean questions when no input (except '\n') is given.
   bool trueByDefault;
 
