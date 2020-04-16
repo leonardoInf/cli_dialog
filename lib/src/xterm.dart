@@ -2,8 +2,10 @@
 abstract class Keys {
   /// Arrow down. Consists of three bytes.
   static const arrowDown = [27, 91, 66];
+
   /// Arrows up. Consists of three bytes.
   static const arrowUp = [27, 91, 65];
+
   /// Enter key. Single byte.
   static const enter = 10;
 }
