@@ -40,8 +40,10 @@ class StdinService {
   // END OF PUBLIC API
 
   var _mockBuffer = [];
-  bool _getEchomode(){
-    if(!stdin.hasTerminal) return false;
-    else return stdin.echoMode;
+  bool _getEchomode() {
+    if (!stdin.hasTerminal)
+      return false;
+    else
+      return stdin.echoMode;
   }
 }

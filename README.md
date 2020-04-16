@@ -1,4 +1,5 @@
 # cli_dialog
+[![Build Status](https://travis-ci.com/leonardoInf/cli_dialog.svg?branch=master)](https://travis-ci.com/leonardoInf/cli_dialog)
 
 A Dart package which allows you to easily create Angular CLI style CLI dialogs.
 This package does not have any dependencies. The following GIF shows a CLI dialog which was created using this library.

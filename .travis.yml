@@ -1,7 +1,15 @@
+# Stripped down from https://github.com/dart-lang/pub/blob/master/.travis.yml
+
 language: dart
 
 dart:
   - dev
+
+os:
+  - linux
+  - osx
+  - windows
+
 dart_task:
   - test: .
   - dartfmt
