@@ -61,7 +61,7 @@ class ListChooser {
     }
   }
 
-  void _renderList(index, {initial: false}) {
+  void _renderList(index, {initial = false}) {
     if (!initial) {
       _deletePreviousList();
     }

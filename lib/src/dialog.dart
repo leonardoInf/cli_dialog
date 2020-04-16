@@ -17,7 +17,7 @@ class CLI_Dialog {
       this.booleanQuestions,
       this.listQuestions,
       this.order,
-      this.trueByDefault: false}) {
+      this.trueByDefault = false}) {
     _checkQuestions();
   }
   CLI_Dialog.std(this._std_input, this._std_output,
@@ -25,11 +25,11 @@ class CLI_Dialog {
       this.booleanQuestions,
       this.listQuestions,
       this.order,
-      this.trueByDefault: false}) {
+      this.trueByDefault = false}) {
     _checkQuestions();
   }
 
-  void addQuestion(p_question, key, {is_boolean: false}) {
+  void addQuestion(p_question, key, {is_boolean = false}) {
     if (is_boolean) {
       booleanQuestions.add([p_question, key]);
     } else {
@@ -37,7 +37,7 @@ class CLI_Dialog {
     }
   }
 
-  void addQuestions(p_questions, {is_boolean: false}) {
+  void addQuestions(p_questions, {is_boolean = false}) {
     if (is_boolean) {
       booleanQuestions.addAll(p_questions);
     } else {
@@ -175,7 +175,7 @@ class CLI_Dialog {
 
   void _getBooleanAnswer(question, key) {
     var input = _getInput(_booleanQuestion(question), acceptEmptyAnswer: true);
-    if (input.length == 0) {
+    if (input.isEmpty) {
       answers[key] = trueByDefault;
     } else {
       answers[key] = (input[0] == 'y' || input[0] == 'Y');

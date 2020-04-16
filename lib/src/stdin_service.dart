@@ -7,13 +7,14 @@ class StdinService {
   bool mock;
   StdoutService informStdout;
 
-  StdinService({this.mock: false, this.informStdout});
+  StdinService({this.mock = false, this.informStdout});
 
   void addToBuffer(elements) {
-    if (elements is Iterable)
+    if (elements is Iterable) {
       _mockBuffer.addAll(elements);
-    else
+    } else {
       _mockBuffer.add(elements); // that is, if it is only one element
+    }
   }
 
   int readByteSync() {
@@ -41,9 +42,10 @@ class StdinService {
 
   var _mockBuffer = [];
   bool _getEchomode() {
-    if (!stdin.hasTerminal)
+    if (!stdin.hasTerminal) {
       return false;
-    else
+    } else {
       return stdin.echoMode;
+    }
   }
 }

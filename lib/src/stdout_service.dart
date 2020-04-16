@@ -3,7 +3,7 @@ import 'dart:io';
 class StdoutService {
   bool mock;
 
-  StdoutService({this.mock: false});
+  StdoutService({this.mock = false});
 
   void write(str) {
     if (mock) {
@@ -27,7 +27,7 @@ class StdoutService {
   List getOutput() {
     List ret = [];
     _output.forEach((element) {
-      if (element.length > 0) {
+      if (element.isNotEmpty) {
         ret.add(element);
       }
     });
@@ -47,8 +47,9 @@ class StdoutService {
     if (_cursor['x'] < currLine.length) {
       currLine.removeAt(_cursor['x']);
       currLine.insert(_cursor['x'], _buffer[0]);
-    } else
+    } else {
       currLine.add(_buffer[0]);
+    }
     _output[_cursor['y']] = currLine.join('');
     _cursor['x'] += 1;
   }
@@ -123,10 +124,11 @@ class StdoutService {
   }
 
   void _removeCharFromBuffer() {
-    if (_buffer.length > 1)
+    if (_buffer.length > 1) {
       _buffer = _buffer.substring(1);
-    else
+    } else {
       _buffer = '';
+    }
   }
 
   int _removeSequenceFromBuffer() {
