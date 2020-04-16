@@ -1,5 +1,6 @@
 import 'package:test/test.dart';
 import 'package:cli_dialog/cli_dialog.dart';
+import 'package:cli_dialog/src/xterm.dart';
 import 'test_utils.dart';
 
 void main() {
@@ -7,32 +8,27 @@ void main() {
     var std_output = StdoutService(mock: true);
     var std_input = StdinService(mock: true, informStdout: std_output);
 
-    //key codes
-    const enter = 10;
-    const arrowUp = [27, 91, 65];
-    const arrowDown = [27, 91, 66];
-
     std_input.addToBuffer([
       'My project\n',
       'No\n',
-      ...arrowDown,
-      ...arrowDown,
-      ...arrowDown,
-      ...arrowDown,
-      ...arrowUp,
-      enter
+      ...Keys.arrowDown,
+      ...Keys.arrowDown,
+      ...Keys.arrowDown,
+      ...Keys.arrowDown,
+      ...Keys.arrowUp,
+      Keys.enter
     ]);
 
-    var questions = [
+    const questions = [
       ['What name would you like to use for the project?', 'project_name']
     ];
-    var booleanQuestions = [
+    const booleanQuestions = [
       ['Would you like to add AngularDart routing?', 'routing']
     ];
 
-    var listQuestion = 'Which stylesheet format would you like to use?';
+    const listQuestion = 'Which stylesheet format would you like to use?';
 
-    var options = [
+    const options = [
       'CSS',
       'SCSS   [ https://sass-lang.com/documentation/syntax#scss                ]',
       'Sass   [ https://sass-lang.com/documentation/syntax#the-indented-syntax ]',
@@ -40,14 +36,14 @@ void main() {
       'Stylus [ http://stylus-lang.com                                         ]'
     ];
 
-    var listQuestions = [
+    const listQuestions = [
       [
         {'question': listQuestion, 'options': options},
         'stylesheet'
       ]
     ];
 
-    var expectedAnswer = {
+    const expectedAnswer = {
       'project_name': 'My project',
       'routing': false,
       'stylesheet':

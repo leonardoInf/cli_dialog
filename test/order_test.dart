@@ -14,30 +14,30 @@ void main() {
   });
 
   test('Order is respected', () {
-    var questions = [
+    const questions = [
       ['Whats´up?', 'B']
     ];
 
-    var booleanQuestions = [
+    const booleanQuestions = [
       ['Are you serious right now?', 'C'],
       ['Really?', 'A'],
     ];
 
-    var order = ['C', 'A', 'B'];
+    const order = ['C', 'A', 'B'];
 
     std_input.addToBuffer(['Not really\n', 'Yes\n', 'Nothing\n']);
 
-    var dialog = CLI_Dialog.std(std_input, std_output,
+    final dialog = CLI_Dialog.std(std_input, std_output,
         questions: questions, booleanQuestions: booleanQuestions, order: order);
-    var answer = dialog.ask();
+    final answer = dialog.ask();
 
-    var expectedAnswer = {
+    const expectedAnswer = {
       'C': false,
       'A': true,
       'B': 'Nothing',
     };
 
-    var expectedOutput = '''
+    final expectedOutput = '''
 ${booleanQnA('Are you serious right now?', 'No')}
 ${booleanQnA('Really?', 'Yes')}
 ${QnA('Whats´up?', 'Nothing')}''';
@@ -47,7 +47,7 @@ ${QnA('Whats´up?', 'Nothing')}''';
   });
 
   test('Order is respected with lists too', () {
-    var listQuestions = [
+    const listQuestions = [
       [
         {
           'question': 'What is your favourite number?',
@@ -64,12 +64,12 @@ ${QnA('Whats´up?', 'Nothing')}''';
       ]
     ];
 
-    var expectedOutput = questionNList(
+    final expectedOutput = questionNList(
             'What is your favourite letter?', ['A', 'B', 'C', 'D', 'E'], 3) +
         '\n' +
         questionNList('What is your favourite number?', ['1', '2', '3'], 2);
 
-    var order = ['question2', 'question1'];
+    const order = ['question2', 'question1'];
 
     std_input.addToBuffer([
       ...Keys.arrowDown,
@@ -81,7 +81,7 @@ ${QnA('Whats´up?', 'Nothing')}''';
       Keys.enter
     ]);
 
-    var dialog = CLI_Dialog.std(std_input, std_output,
+    final dialog = CLI_Dialog.std(std_input, std_output,
         listQuestions: listQuestions, order: order);
     dialog.ask();
 

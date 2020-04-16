@@ -7,7 +7,7 @@ Matcher getMatcher(msg) =>
 void main() {
   test('Each question entry must be a list consisting of a question and a key.',
       () {
-    var errorMatcher = getMatcher(
+    final errorMatcher = getMatcher(
         'Each question entry must be a list consisting of a question and a key.');
     expect(
         () => CLI_Dialog(questions: [
@@ -28,7 +28,7 @@ void main() {
   });
 
   test('All questions and keys must be Strings.', () {
-    var errorMatcher = getMatcher('All questions and keys must be Strings.');
+    final errorMatcher = getMatcher('All questions and keys must be Strings.');
     expect(
         () => CLI_Dialog(questions: [
               ['valid question', 'some_key'],
@@ -52,7 +52,7 @@ void main() {
   });
 
   test('Your question must be a String.', () {
-    var errorMatcher = getMatcher('Your question must be a String.');
+    final errorMatcher = getMatcher('Your question must be a String.');
     expect(
         () => CLI_Dialog(listQuestions: [
               [
@@ -74,7 +74,7 @@ void main() {
   });
 
   test('Your list options must be a list of Strings.', () {
-    var errorMatcher =
+    final errorMatcher =
         getMatcher('Your list options must be a list of Strings.');
     expect(
         () => CLI_Dialog(listQuestions: [
@@ -94,7 +94,7 @@ void main() {
   });
 
   test('Your list dialog map must have exactly two entries.', () {
-    var errorMatcher =
+    final errorMatcher =
         getMatcher('Your list dialog map must have exactly two entries.');
     expect(
         () => CLI_Dialog(listQuestions: [
@@ -118,7 +118,7 @@ void main() {
   });
 
   test('You have two or more keys with the same name.', () {
-    var errorMatcher =
+    final errorMatcher =
         getMatcher('You have two or more keys with the same name.');
     expect(
         () => CLI_Dialog(questions: [

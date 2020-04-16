@@ -29,7 +29,7 @@ class StdinService {
     if (mock) {
       var ret = _mockBuffer[0];
       _mockBuffer.removeAt(0);
-      if (informStdout != null) {
+      if (informStdout != null && _getEchomode()) {
         informStdout.write(ret);
       }
       return ret;
@@ -40,4 +40,8 @@ class StdinService {
   // END OF PUBLIC API
 
   var _mockBuffer = [];
+  bool _getEchomode(){
+    if(!stdin.hasTerminal) return false;
+    else return stdin.echoMode;
+  }
 }

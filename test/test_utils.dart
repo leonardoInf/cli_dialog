@@ -1,12 +1,12 @@
 export 'package:cli_dialog/src/services.dart';
 import 'package:cli_dialog/src/xterm.dart';
 
-String booleanQnA(question, answer) =>
+String booleanQnA(question, answer, {trueByDefault: false}) =>
     XTerm.green('?') +
     ' ' +
     XTerm.bold(question) +
     ' ' +
-    XTerm.gray('(y/N)') +
+    XTerm.gray(trueByDefault ? '(Y/n)' : '(y/N)') +
     ' ' +
     XTerm.teal(answer);
 

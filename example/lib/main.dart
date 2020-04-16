@@ -8,14 +8,14 @@ dynamic runExample([stdin_service, stdout_service]) {
     stdout_service = StdoutService();
   }
 
-  var questions = [
+  const questions = [
     ['What name would you like to use for the project?', 'project_name']
   ];
-  var booleanQuestions = [
+  const booleanQuestions = [
     ['Would you like to add AngularDart routing?', 'routing']
   ];
 
-  var listQuestions = [
+  const listQuestions = [
     [
       {
         'question': 'Which stylesheet format would you like to use?',

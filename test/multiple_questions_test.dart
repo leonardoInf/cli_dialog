@@ -5,20 +5,20 @@ import 'test_utils.dart';
 
 void main() {
   test('Multiple questions in each category', () {
-    var std_output = StdoutService(mock: true);
-    var std_input = StdinService(mock: true, informStdout: std_output);
+    final std_output = StdoutService(mock: true);
+    final std_input = StdinService(mock: true, informStdout: std_output);
 
-    var questions = [
+    const questions = [
       ['Question 1', 'question1'],
       ['Question 2', 'question2']
     ];
 
-    var booleanQuestions = [
+    const booleanQuestions = [
       ['Are you serious right now?', 'C'],
       ['Really?', 'A'],
     ];
 
-    var listQuestions = [
+    const listQuestions = [
       [
         {
           'question': 'What is your favourite number?',
@@ -45,12 +45,12 @@ void main() {
       Keys.enter
     ]);
 
-    var dialog = CLI_Dialog.std(std_input, std_output,
+    final dialog = CLI_Dialog.std(std_input, std_output,
         questions: questions,
         booleanQuestions: booleanQuestions,
         listQuestions: listQuestions);
 
-    var expectedAnswer = {
+    const expectedAnswer = {
       'question1': 'Answer1',
       'question2': 'Answer2',
       'C': true,
@@ -70,9 +70,9 @@ void main() {
     outputBuffer.write(questionNList(
         'What is your favourite letter?', ['A', 'B', 'C', 'D', 'E'], 1));
 
-    var expectedOutput = outputBuffer.toString();
+    final expectedOutput = outputBuffer.toString();
 
-    var answer = dialog.ask();
+    final answer = dialog.ask();
 
     expect(answer, equals(expectedAnswer));
     expect(std_output.getStringOutput(), equals(expectedOutput));

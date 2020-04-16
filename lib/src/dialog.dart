@@ -10,13 +10,22 @@ class CLI_Dialog {
   List listQuestions;
   List<String> order;
   List<List<String>> questions;
+  bool trueByDefault;
 
   CLI_Dialog(
-      {this.questions, this.booleanQuestions, this.listQuestions, this.order}) {
+      {this.questions,
+      this.booleanQuestions,
+      this.listQuestions,
+      this.order,
+      this.trueByDefault: false}) {
     _checkQuestions();
   }
   CLI_Dialog.std(this._std_input, this._std_output,
-      {this.questions, this.booleanQuestions, this.listQuestions, this.order}) {
+      {this.questions,
+      this.booleanQuestions,
+      this.listQuestions,
+      this.order,
+      this.trueByDefault: false}) {
     _checkQuestions();
   }
 
@@ -72,7 +81,8 @@ class CLI_Dialog {
     _getAnswer(question, key);
   }
 
-  String _booleanQuestion(str) => _question(str) + _comment('(y/N)') + ' ';
+  String _booleanQuestion(str) =>
+      _question(str) + _comment(trueByDefault ? '(Y/n)' : '(y/N)') + ' ';
 
   void _checkDuplicateKeys() {
     var keyList = [];
@@ -164,21 +174,31 @@ class CLI_Dialog {
   }
 
   void _getBooleanAnswer(question, key) {
-    var input = _getInput(_booleanQuestion(question));
-    answers[key] = (input[0] == 'y' || input[0] == 'Y');
+    var input = _getInput(_booleanQuestion(question), acceptEmptyAnswer: true);
+    if (input.length == 0) {
+      answers[key] = trueByDefault;
+    } else {
+      answers[key] = (input[0] == 'y' || input[0] == 'Y');
+    }
     var replaceStr = '\r' + _booleanQuestion(question) + XTerm.blankRemaining();
     replaceStr += (answers[key] ? XTerm.teal('Yes') : XTerm.teal('No'));
     _std_output.writeln(replaceStr);
   }
 
-  String _getInput(formattedQuestion) {
+  String _getInput(formattedQuestion, {acceptEmptyAnswer: false}) {
     var input = '';
-    while (input.length == 0) {
+    if (!acceptEmptyAnswer) {
+      while (input.length == 0) {
+        input = _std_input
+            .readLineSync(encoding: Encoding.getByName('utf-8'))
+            .trim();
+        _std_output.write(XTerm.moveUp(1) + formattedQuestion);
+      }
+    } else {
       input =
           _std_input.readLineSync(encoding: Encoding.getByName('utf-8')).trim();
       _std_output.write(XTerm.moveUp(1) + formattedQuestion);
     }
-    ;
     return input;
   }
 
