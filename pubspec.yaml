@@ -1,7 +1,7 @@
 name: cli_dialog
 description: Create CLI dialogs in Angular CLI style
 version: 0.0.1
-author: Leonardo Braguinski <leo.braguinski@gmail.com>
+homepage: https://github.com/leonardoInf/cli_dialog
 
 environment:
   sdk: ">=2.3.0 <3.0.0"
