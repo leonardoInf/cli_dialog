@@ -67,7 +67,8 @@ class ListChooser {
     }
     for (var i = 0; i < items.length; i++) {
       if (i == index) {
-        _std_output.writeln(XTerm.rightIndicator() + ' ' + XTerm.teal(items[i]));
+        _std_output
+            .writeln(XTerm.rightIndicator() + ' ' + XTerm.teal(items[i]));
         continue;
       }
       _std_output.writeln('  ' + items[i]);

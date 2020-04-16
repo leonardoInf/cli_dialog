@@ -9,8 +9,8 @@ void main() {
   List<String> options;
 
   setUp(() {
-    std_input = StdinService(isMock: true);
-    std_output = StdoutService(isMock: true);
+    std_input = StdinService(mock: true);
+    std_output = StdoutService(mock: true);
     options = ['A', 'B', 'C', 'D'];
   });
 
@@ -92,7 +92,6 @@ void main() {
     expect(chooser.choose(), equals('A'));
     expect(std_output.getStringOutput(), equals(expectedOutput));
   });
-
 
   test('Throws exception if no option is given', () {
     expect(

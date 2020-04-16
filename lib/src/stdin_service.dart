@@ -4,10 +4,10 @@ import 'dart:io';
 import 'package:cli_dialog/src/stdout_service.dart';
 
 class StdinService {
-  bool isMock;
+  bool mock;
   StdoutService informStdout;
 
-  StdinService({this.isMock: false, this.informStdout});
+  StdinService({this.mock: false, this.informStdout});
 
   void addToBuffer(elements) {
     if (elements is Iterable)
@@ -17,7 +17,7 @@ class StdinService {
   }
 
   int readByteSync() {
-    if (isMock) {
+    if (mock) {
       var ret = _mockBuffer[0];
       _mockBuffer.removeAt(0);
       return (ret is int ? ret : int.parse(ret));
@@ -26,7 +26,7 @@ class StdinService {
   }
 
   String readLineSync({encoding}) {
-    if (isMock) {
+    if (mock) {
       var ret = _mockBuffer[0];
       _mockBuffer.removeAt(0);
       if (informStdout != null) {

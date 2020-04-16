@@ -4,8 +4,8 @@ import 'test_utils.dart';
 
 void main() {
   test('Main functionality', () {
-    var std_output = StdoutService(isMock: true);
-    var std_input = StdinService(isMock: true, informStdout: std_output);
+    var std_output = StdoutService(mock: true);
+    var std_input = StdinService(mock: true, informStdout: std_output);
 
     //key codes
     const enter = 10;

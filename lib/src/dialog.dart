@@ -12,9 +12,13 @@ class CLI_Dialog {
   List<List<String>> questions;
 
   CLI_Dialog(
-      {this.questions, this.booleanQuestions, this.listQuestions, this.order});
+      {this.questions, this.booleanQuestions, this.listQuestions, this.order}) {
+    _checkQuestions();
+  }
   CLI_Dialog.std(this._std_input, this._std_output,
-      {this.questions, this.booleanQuestions, this.listQuestions, this.order});
+      {this.questions, this.booleanQuestions, this.listQuestions, this.order}) {
+    _checkQuestions();
+  }
 
   void addQuestion(p_question, key, {is_boolean: false}) {
     if (is_boolean) {
@@ -69,6 +73,68 @@ class CLI_Dialog {
   }
 
   String _booleanQuestion(str) => _question(str) + _comment('(y/N)') + ' ';
+
+  void _checkDuplicateKeys() {
+    var keyList = [];
+
+    [questions, booleanQuestions, listQuestions].forEach((entry) {
+      if (entry != null) {
+        entry.forEach((element) {
+          keyList.add(element[1]);
+        });
+      }
+    });
+
+
+    //check for duplicates
+    if (keyList.length != keyList.toSet().length) {
+      throw ArgumentError('You have two or more keys with the same name.');
+    }
+  }
+
+  void _checkQuestions() {
+    [questions, booleanQuestions, listQuestions].forEach((entry) {
+      if (entry != null) {
+        entry.forEach((element) {
+          if (element != null) {
+            if (element.length != 2) {
+              throw ArgumentError(
+                  'Each question entry must be a list consisting of a question and a key.');
+            }
+          } else {
+            throw ArgumentError('All questions and keys must be Strings.');
+          }
+        });
+      }
+    });
+
+    [questions, booleanQuestions].forEach((entry) {
+      if (entry != null) {
+        entry.forEach((element) {
+          if (element[0] is! String || element[1] is! String) {
+            throw ArgumentError('All questions and keys must be Strings.');
+          }
+        });
+      }
+    });
+
+    if (listQuestions != null) {
+      listQuestions.forEach((element) {
+        if (element[0]['question'] is! String) {
+          throw ArgumentError('Your question must be a String.');
+        }
+        if (element[0]['options'] is! List<String>) {
+          throw ArgumentError('Your list options must be a list of Strings.');
+        }
+
+        if (element[0].length != 2) {
+          throw ArgumentError(
+              'Your list dialog map must have exactly two entries.');
+        }
+      });
+    }
+    _checkDuplicateKeys();
+  }
 
   String _comment(str) => XTerm.gray(str);
 

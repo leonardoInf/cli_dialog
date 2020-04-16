@@ -1,12 +1,12 @@
 import 'dart:io';
 
 class StdoutService {
-  bool isMock;
+  bool mock;
 
-  StdoutService({this.isMock: false});
+  StdoutService({this.mock: false});
 
   void write(str) {
-    if (isMock) {
+    if (mock) {
       _buffer += str;
       _flush();
     } else {
@@ -15,7 +15,7 @@ class StdoutService {
   }
 
   void writeln(str) {
-    if (isMock) {
+    if (mock) {
       _buffer += str + '\n';
       _flush();
     } else {
@@ -107,7 +107,7 @@ class StdoutService {
     if (RegExp(r'\[\dA').hasMatch(sequence)) {
       _cursor['x'] = 0;
       var stepsUp =
-      int.parse(RegExp(r'\[\dA').firstMatch(sequence).group(0)[1]);
+          int.parse(RegExp(r'\[\dA').firstMatch(sequence).group(0)[1]);
       if (_cursor['y'] - stepsUp >= 0) {
         _cursor['y'] -= stepsUp;
       }

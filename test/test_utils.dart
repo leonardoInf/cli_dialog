@@ -1,6 +1,15 @@
 export 'package:cli_dialog/src/services.dart';
 import 'package:cli_dialog/src/xterm.dart';
 
+String booleanQnA(question, answer) =>
+    XTerm.green('?') +
+    ' ' +
+    XTerm.bold(question) +
+    ' ' +
+    XTerm.gray('(y/N)') +
+    ' ' +
+    XTerm.teal(answer);
+
 String markedList(options, index) {
   var output = StringBuffer();
 
@@ -14,15 +23,6 @@ String markedList(options, index) {
   return outputStr.substring(
       0, outputStr.length - 1); // remove trailing newline
 }
-
-String booleanQnA(question, answer) =>
-    XTerm.green('?') +
-    ' ' +
-    XTerm.bold(question) +
-    ' ' +
-    XTerm.gray('(y/N)') +
-    ' ' +
-    XTerm.teal(answer);
 
 String QnA(question, answer) =>
     XTerm.green('?') + ' ' + XTerm.bold(question) + ' ' + XTerm.teal(answer);

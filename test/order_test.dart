@@ -9,8 +9,8 @@ void main() {
   StdinService std_input;
 
   setUp(() {
-    std_output = StdoutService(isMock: true);
-    std_input = StdinService(isMock: true, informStdout: std_output);
+    std_output = StdoutService(mock: true);
+    std_input = StdinService(mock: true, informStdout: std_output);
   });
 
   test('Order is respected', () {
@@ -46,23 +46,45 @@ ${QnA('Whats´up?', 'Nothing')}''';
     expect(std_output.getStringOutput(), equals(expectedOutput));
   });
 
-  test('Order is respected with lists too', (){
-      var listQuestions = [
-        [{'question': 'What is your favourite number?', 'options': ['1', '2', '3']}
-        , 'question1'],
-        [{'question': 'What is your favourite letter?', 'options': ['A', 'B', 'C', 'D', 'E']}, 'question2']
-      ];
+  test('Order is respected with lists too', () {
+    var listQuestions = [
+      [
+        {
+          'question': 'What is your favourite number?',
+          'options': ['1', '2', '3']
+        },
+        'question1'
+      ],
+      [
+        {
+          'question': 'What is your favourite letter?',
+          'options': ['A', 'B', 'C', 'D', 'E']
+        },
+        'question2'
+      ]
+    ];
 
-      var expectedOutput =  questionNList('What is your favourite letter?', ['A', 'B', 'C', 'D', 'E'], 3) + '\n' + questionNList('What is your favourite number?', ['1', '2', '3'], 2);
+    var expectedOutput = questionNList(
+            'What is your favourite letter?', ['A', 'B', 'C', 'D', 'E'], 3) +
+        '\n' +
+        questionNList('What is your favourite number?', ['1', '2', '3'], 2);
 
-      var order = ['question2', 'question1'];
+    var order = ['question2', 'question1'];
 
-      std_input.addToBuffer([...Keys.arrowDown, ...Keys.arrowDown, ...Keys.arrowDown, Keys.enter, ...Keys.arrowDown, ...Keys.arrowDown, Keys.enter]);
+    std_input.addToBuffer([
+      ...Keys.arrowDown,
+      ...Keys.arrowDown,
+      ...Keys.arrowDown,
+      Keys.enter,
+      ...Keys.arrowDown,
+      ...Keys.arrowDown,
+      Keys.enter
+    ]);
 
-      var dialog = CLI_Dialog.std(std_input, std_output,
-          listQuestions: listQuestions, order: order);
-      dialog.ask();
+    var dialog = CLI_Dialog.std(std_input, std_output,
+        listQuestions: listQuestions, order: order);
+    dialog.ask();
 
-      expect(std_output.getStringOutput(), equals(expectedOutput));
+    expect(std_output.getStringOutput(), equals(expectedOutput));
   });
 }

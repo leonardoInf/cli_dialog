@@ -4,7 +4,7 @@ import 'package:cli_dialog/src/xterm.dart';
 
 void main() {
   test('Basic functionality', () {
-    var std_output = StdoutService(isMock: true);
+    var std_output = StdoutService(mock: true);
     std_output.writeln(
         'First line${XTerm.blankRemaining()}\n??${XTerm.moveUp(1)}Go\n');
     std_output.writeln('Second line');
