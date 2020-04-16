@@ -1,3 +1,4 @@
 - 0.0.1: Initial version (experimental)
 - 0.1.0: Bump to 0.1.0 to increase score
 - 0.1.1: Small health improvement
+- 0.1.2: Compatible update to the addQuestion(s) methods and add documentation

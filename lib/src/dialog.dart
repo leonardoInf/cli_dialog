@@ -4,14 +4,27 @@ export 'list_chooser.dart';
 import 'services.dart';
 import 'xterm.dart';
 
+/// This is the most important class which should usually be instantiated when builing CLI dialogs.
 class CLI_Dialog {
+  /// This is where the results = answers from the CLI dialog go. This map is updated and returned when calling [ask].
   Map answers = {};
+  /// This is where the boolean questions are stored during runtime. Feel free to access it like any other list.
   List<List<String>> booleanQuestions;
+  /// This is where the list questions are stored during runtime (where the user selects a value). Feel free to access it like any other list.
   List listQuestions;
+  /// This list contains the order in which the questions are asked in the dialog. Feel free to access it like any other list.
   List<String> order;
+  /// This is where the regular questions are stored during runtime.
   List<List<String>> questions;
+  /// Indicates the default behaviour of boolean questions when no input (except '\n') is given.
   bool trueByDefault;
 
+  /// This is the default constructor to create a CLI Dialog
+  /// You can pass lists of normal [questions], [booleanQuestions], [listQuestions].
+  /// All these named parameters are optional as long as at least one of them is given.
+  /// Furthermore you can pass a particular order. If no order is given then the default order is used (see README.md)
+  /// There is also [trueByDefault] (false by default) which indicates how booleanQuestions behave if no input is given
+  /// There are basic format checks which try to prevent you from passing invalid argmuents.
   CLI_Dialog(
       {this.questions,
       this.booleanQuestions,
@@ -20,6 +33,15 @@ class CLI_Dialog {
       this.trueByDefault = false}) {
     _checkQuestions();
   }
+
+  /// This named constructor should mostly be used when unit testing.
+  ///
+  /// ```
+  /// var std_output = StdoutService(mock: true);
+  /// var std_input = StdinService(mock: true, informStdout: std_output);
+  /// std_input.addToBuffer(...Keys.arrowDown, Keys.enter);
+  /// final dialog = CLI_Dialog.std(std_input, std_output, listQuestions: listQuestions);
+  /// ```
   CLI_Dialog.std(this._std_input, this._std_output,
       {this.questions,
       this.booleanQuestions,
@@ -29,22 +51,43 @@ class CLI_Dialog {
     _checkQuestions();
   }
 
-  void addQuestion(p_question, key, {is_boolean = false}) {
+  /// This method is another way of adding questions after instantiating [CLI_Dialog]
+  /// Pass [is_bool] or [is_list] as a named argument to indicate the type of question you are adding
+  ///
+  /// ```
+  /// final dialog = CLI_Dialog();
+  /// dialog.addQuestion([{'question': 'How are you?', options: ['Good', 'Not so good']}, 'mood'], is_list: true);
+  /// ```
+  void addQuestion(p_question, key, {is_boolean = false, is_list = false}) {
     if (is_boolean) {
       booleanQuestions.add([p_question, key]);
+    } else if (is_list) {
+      listQuestions.add(p_question);
     } else {
       questions.add([p_question, key]);
     }
   }
 
-  void addQuestions(p_questions, {is_boolean = false}) {
+  /// Same as [addQuestion] but you can add multiple questions (of the same type)
+  void addQuestions(p_questions, {is_boolean = false, is_list = false}) {
     if (is_boolean) {
       booleanQuestions.addAll(p_questions);
+    } else if (is_list) {
+      listQuestions.addAll(p_questions);
     } else {
       questions.addAll(p_questions);
     }
   }
 
+  /// Use this method to retreive the results from your CLI dialog.
+  /// A map is being returned which you can query using your keys.
+  ///
+  /// ```
+  /// final dialog = CLI_Dialog();
+  /// dialog.addQuestion('What is your name?', 'name');
+  /// var answers = dialog.ask();
+  /// print('Your name is ${answers["name"]}');
+  /// ```
   Map ask() {
     if (order == null) {
       _standardOrder();
