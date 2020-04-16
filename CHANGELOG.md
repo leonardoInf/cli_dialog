@@ -1,1 +1,2 @@
-- 0.0.1: Initial version
+- 0.0.1: Initial version (experimental)
+- 0.1.0: Bump to 0.1.0 to increase score

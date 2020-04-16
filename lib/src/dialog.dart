@@ -185,10 +185,10 @@ class CLI_Dialog {
     _std_output.writeln(replaceStr);
   }
 
-  String _getInput(formattedQuestion, {acceptEmptyAnswer: false}) {
+  String _getInput(formattedQuestion, {acceptEmptyAnswer = false}) {
     var input = '';
     if (!acceptEmptyAnswer) {
-      while (input.length == 0) {
+      while (input.isEmpty) {
         input = _std_input
             .readLineSync(encoding: Encoding.getByName('utf-8'))
             .trim();
