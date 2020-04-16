@@ -16,6 +16,7 @@ You can find the source for this example [here](example/lib/main.dart)
 * [Testing](#testing)
 * [How it works](#how-it-works)
 * [Contributing](#contributing)
+* [Known issues](#known-issues)
 * [Acknowledgements](#acknowledgements)
 
 
@@ -145,6 +146,10 @@ Of course you are welcome to contribute to this project by issuing a pull reques
 Please write unit tests (`test/`) for new functionality and make sure that `test.sh` and `lint.sh` (`tools/`) run succesfully before submitting. 
 
 Please format your code using `dartfmt -w .` (this is also covered by `lint.sh`).
+
+## Known issues
+
+cli_dialog currently does not work for Windows.
 
 ## Acknowledgements
 
