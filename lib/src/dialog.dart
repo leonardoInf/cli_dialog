@@ -85,7 +85,6 @@ class CLI_Dialog {
       }
     });
 
-
     //check for duplicates
     if (keyList.length != keyList.toSet().length) {
       throw ArgumentError('You have two or more keys with the same name.');

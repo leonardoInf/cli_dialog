@@ -5,7 +5,7 @@ dynamic runExample([stdin_service, stdout_service]) {
     stdin_service = StdinService();
   }
   if (stdout_service == null) {
-    stdout_service = StdoutService;
+    stdout_service = StdoutService();
   }
 
   var questions = [
