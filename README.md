@@ -143,7 +143,7 @@ This library uses ANSI/XTerm escape sequences and regular escape sequences. You 
 
 Of course you are welcome to contribute to this project by issuing a pull request on Github.
 
-Please write unit tests (`test/`) for new functionality and make sure that `test.sh` and `lint.sh` (`tools/`) run succesfully before submitting. 
+Please write unit tests (`test/`) for new functionality and make sure that `test.sh` and `lint.sh` (`tool/`) run succesfully before submitting. 
 
 Please format your code using `dartfmt -w .` (this is also covered by `lint.sh`).
 
