@@ -8,7 +8,7 @@ dart:
 os:
   - linux
   - osx
-  #- windows # Currently does not work for Windows
+  - windows
 
 dart_task:
   - test: .
