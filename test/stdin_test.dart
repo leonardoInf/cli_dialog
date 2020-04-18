@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:test/test.dart';
 import 'package:cli_dialog/src/xterm.dart';
 import 'test_utils.dart';
@@ -7,7 +8,7 @@ void main() {
 
   test('Basic functionality', () {
     std_in = StdinService(mock: true);
-    const entries = ["Entry1\n", "Entry2\r", Keys.enter];
+    final entries = ["Entry1\n", "Entry2\r", Keys.enter];
     std_in.addToBuffer(entries);
     final line1 = std_in.readLineSync();
     final line2 = std_in.readLineSync();
@@ -18,10 +19,14 @@ void main() {
   test('Informs stdout', () {
     final std_out = StdoutService(mock: true);
     final std_in = StdinService(mock: true, informStdout: std_out);
-    std_in.addToBuffer(['1337', ...Keys.arrowDown]);
+    std_in.addToBuffer(['1337\n', ...Keys.arrowDown]);
     std_in.readLineSync();
-    for (var i = 0; i < 3; i++) {
-      std_in.readByteSync();
+    if (Platform.isWindows) {
+      std_in.readByteSync();	// arrowDown is just a single byte ('s') on Windows
+    } else {
+      for (var i = 0; i < 3; i++) {
+        std_in.readByteSync();
+      }
     }
     expect(std_out.getOutput(), equals(['1337']));
   });

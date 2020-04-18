@@ -93,6 +93,16 @@ class ListChooser {
   }
 
   int _userInput() {
+    if (Platform.isWindows) {
+      var byte = _std_input.readByteSync();
+
+      if (byte == Keys.enter) return 10;
+      if (byte == Keys.arrowUp[0]) return 65;
+      if (byte == Keys.arrowDown[0])
+        return 66;
+      else
+        return byte;
+    }
     for (var i = 0; i < 2; i++) {
       if (_std_input.readByteSync() == 10) {
         return 10;
