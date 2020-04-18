@@ -13,6 +13,8 @@ class ListChooser {
     _checkItems();
     //relevant when running from IntelliJ console pane for example
     if (stdin.hasTerminal) {
+      // lineMode must be true to set echoMode in Windows
+      // see https://github.com/dart-lang/sdk/issues/28599
       stdin.echoMode = false;
       stdin.lineMode = false;
     }
@@ -84,9 +86,9 @@ class ListChooser {
 
   void _resetStdin() {
     if (stdin.hasTerminal) {
-      //see default ctor
-      stdin.echoMode = true;
+      //see default ctor. Order is important here
       stdin.lineMode = true;
+      stdin.echoMode = true;
     }
   }
 
