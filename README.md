@@ -149,7 +149,15 @@ Please format your code using `dartfmt -w .` (this is also covered by `lint.sh`)
 
 ## Known issues
 
-cli_dialog currently does not work for Windows.
+cli_dialog currently can not be tested with Travis CI on Windows (I guess there is something wrong with the 
+interpretation of escape codes in their system. Nonetheless, cli_dialog also works on Windows with the following 
+caveats:
+
+- Use 'W' and 'S' keys instead of arrow up and arrow down
+- Colors are a little different
+- the unicode right indicator is replaced by a simple >
+
+You can run the tests locally on your WIndows machine and they should pass.
 
 ## Acknowledgements
 
