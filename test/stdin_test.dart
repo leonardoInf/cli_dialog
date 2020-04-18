@@ -22,7 +22,7 @@ void main() {
     std_in.addToBuffer(['1337\n', ...Keys.arrowDown]);
     std_in.readLineSync();
     if (Platform.isWindows) {
-      std_in.readByteSync();	// arrowDown is just a single byte ('s') on Windows
+      std_in.readByteSync(); // arrowDown is just a single byte ('s') on Windows
     } else {
       for (var i = 0; i < 3; i++) {
         std_in.readByteSync();
