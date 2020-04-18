@@ -16,7 +16,7 @@ You can find the source for this example [here](example/lib/main.dart)
 * [Testing](#testing)
 * [How it works](#how-it-works)
 * [Contributing](#contributing)
-* [Known issues (Windows)](#known-issues)
+* [Known issues on Windows](#known-issues-on-windows)
 * [Acknowledgements](#acknowledgements)
 
 
@@ -147,7 +147,7 @@ Please write unit tests (`test/`) for new functionality and make sure that `test
 
 Please format your code using `dartfmt -w .` (this is also covered by `lint.sh`).
 
-## Known issues (Windows)
+## Known issues on Windows
 
 cli_dialog currently can not be tested with Travis CI on Windows (I guess there is something wrong with the 
 interpretation of escape codes in their system). Nonetheless, cli_dialog also works on Windows with the 
