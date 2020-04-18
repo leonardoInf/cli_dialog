@@ -155,7 +155,7 @@ following caveats:
 
 - Use 'W' and 'S' keys instead of arrow up and arrow down
 - Colors are a little different
-- the unicode right indicator is replaced by a simple >
+- the UTF-16 right indicator is replaced by a simple >
 
 You can run the tests locally on your WIndows machine and they should pass.
 
