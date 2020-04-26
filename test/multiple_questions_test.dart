@@ -6,7 +6,8 @@ import 'test_utils.dart';
 void main() {
   test('Multiple questions in each category', () {
     final std_output = StdoutService(mock: true);
-    final std_input = StdinService(mock: true, informStdout: std_output, isTest: true);
+    final std_input =
+        StdinService(mock: true, informStdout: std_output, isTest: true);
 
     const questions = [
       ['Question 1', 'question1'],

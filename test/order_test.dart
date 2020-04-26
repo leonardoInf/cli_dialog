@@ -10,7 +10,8 @@ void main() {
 
   setUp(() {
     std_output = StdoutService(mock: true);
-    std_input = StdinService(mock: true, informStdout: std_output, isTest: true);
+    std_input =
+        StdinService(mock: true, informStdout: std_output, isTest: true);
   });
 
   test('Order is respected', () {

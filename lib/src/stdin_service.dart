@@ -14,8 +14,8 @@ class StdinService {
 
   /// The default and only constructor where you can optionally indicate
   /// whether you want [mock] stdin and [informStdout]
-  StdinService({this.mock = false, this.informStdout, isTest}){
-    if(isTest != null && isTest) {
+  StdinService({this.mock = false, this.informStdout, isTest}) {
+    if (isTest != null && isTest) {
       _isTest = true;
     }
   }

@@ -6,7 +6,8 @@ import '../../test/test_utils.dart';
 void main() {
   test('Result', () {
     var mockStdout = StdoutService(mock: true);
-    var mockStdin = StdinService(mock: true, informStdout: mockStdout);
+    var mockStdin =
+        StdinService(mock: true, informStdout: mockStdout, isTest: true);
 
     mockStdin.addToBuffer([
       'Some project\n',

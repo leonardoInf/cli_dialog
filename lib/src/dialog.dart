@@ -260,14 +260,14 @@ class CLI_Dialog {
   int _getSize(some_collection) =>
       (some_collection != null ? some_collection.length : 0);
 
-  void _initializeLists(){
-    if(booleanQuestions == null) {
+  void _initializeLists() {
+    if (booleanQuestions == null) {
       booleanQuestions = [];
     }
-    if(listQuestions == null) {
+    if (listQuestions == null) {
       listQuestions = [];
     }
-    if(questions == null) {
+    if (questions == null) {
       questions = [];
     }
   }

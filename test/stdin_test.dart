@@ -18,7 +18,8 @@ void main() {
 
   test('Informs stdout', () {
     final std_out = StdoutService(mock: true);
-    final std_in = StdinService(mock: true, informStdout: std_out, isTest: true);
+    final std_in =
+        StdinService(mock: true, informStdout: std_out, isTest: true);
     std_in.addToBuffer(['1337\n', ...Keys.arrowDown]);
     std_in.readLineSync();
     if (Platform.isWindows) {
