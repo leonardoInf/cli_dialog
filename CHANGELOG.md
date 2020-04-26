@@ -4,4 +4,4 @@
 - 0.1.2: Compatible update to the addQuestion(s) methods and add documentation
 - 0.1.3: Finish documentation for API reference
 - 0.1.4: Add support for Windows (with caveats)
-- 0.1.5: Fix addQuestion() and example for it. Fix tests and stdin_service.
+- 0.1.5: Fix addQuestion() and create example for it. Fix tests and enable Travis CI for Windows.
