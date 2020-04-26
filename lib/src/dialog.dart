@@ -261,9 +261,15 @@ class CLI_Dialog {
       (some_collection != null ? some_collection.length : 0);
 
   void _initializeLists(){
-    booleanQuestions = [];
-    listQuestions = [];
-    questions = [];
+    if(booleanQuestions == null) {
+      booleanQuestions = [];
+    }
+    if(listQuestions == null) {
+      listQuestions = [];
+    }
+    if(questions == null) {
+      questions = [];
+    }
   }
 
   String _listQuestion(str) => _question(str) + _comment('(Use arrow keys)');
