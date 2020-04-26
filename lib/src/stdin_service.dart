@@ -14,7 +14,11 @@ class StdinService {
 
   /// The default and only constructor where you can optionally indicate
   /// whether you want [mock] stdin and [informStdout]
-  StdinService({this.mock = false, this.informStdout});
+  StdinService({this.mock = false, this.informStdout, isTest}){
+    if(isTest != null && isTest) {
+      _isTest = true;
+    }
+  }
 
   /// Use this to simulate stdin.
   ///
@@ -46,7 +50,7 @@ class StdinService {
     if (mock) {
       var ret = _mockBuffer[0];
       _mockBuffer.removeAt(0);
-      if (informStdout != null && _getEchomode()) {
+      if (informStdout != null && (_isTest || _getEchomode())) {
         informStdout.write(ret);
       }
       return ret;
@@ -55,6 +59,8 @@ class StdinService {
   }
 
   // END OF PUBLIC API
+
+  bool _isTest = false;
 
   var _mockBuffer = [];
   bool _getEchomode() {

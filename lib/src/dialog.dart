@@ -37,6 +37,7 @@ class CLI_Dialog {
       this.order,
       this.trueByDefault = false}) {
     _checkQuestions();
+    _initializeLists();
   }
 
   /// This named constructor should mostly be used when unit testing.
@@ -54,6 +55,7 @@ class CLI_Dialog {
       this.order,
       this.trueByDefault = false}) {
     _checkQuestions();
+    _initializeLists();
   }
 
   /// This method is another way of adding questions after instantiating [CLI_Dialog]
@@ -257,6 +259,12 @@ class CLI_Dialog {
 
   int _getSize(some_collection) =>
       (some_collection != null ? some_collection.length : 0);
+
+  void _initializeLists(){
+    booleanQuestions = [];
+    listQuestions = [];
+    questions = [];
+  }
 
   String _listQuestion(str) => _question(str) + _comment('(Use arrow keys)');
 

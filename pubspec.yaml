@@ -1,6 +1,6 @@
 name: cli_dialog
 description: Create beautiful CLI dialogs in Angular CLI style and test them
-version: 0.1.3
+version: 0.1.4
 homepage: https://github.com/leonardoInf/cli_dialog
 
 environment:
