@@ -1,7 +1,8 @@
-- 0.0.1: Initial version (experimental)
-- 0.1.0: Bump to 0.1.0 to increase score
-- 0.1.1: Small health improvement
-- 0.1.2: Compatible update to the addQuestion(s) methods and add documentation
-- 0.1.3: Finish documentation for API reference
-- 0.1.4: Add support for Windows (with caveats)
+- 0.0.1: Initial version (experimental).
+- 0.1.0: Bump to 0.1.0 to increase score.
+- 0.1.1: Small health improvement.
+- 0.1.2: Compatible update to the addQuestion(s) methods and add documentation.
+- 0.1.3: Finish documentation for API reference.
+- 0.1.4: Add support for Windows (with caveats).
 - 0.1.5: Fix addQuestion() and create example for it. Fix tests and enable Travis CI for Windows.
+- 0.2.0: Add navigation mode and messages.

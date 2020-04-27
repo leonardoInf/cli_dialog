@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'services.dart';
 import 'xterm.dart';
@@ -7,9 +8,12 @@ class ListChooser {
   /// The options which are presented to the user
   List<String> items;
 
+  /// Select the navigation mode. See dialog.dart for details.
+  bool navigationMode;
+
   /// Default constructor for the list chooser.
   /// It is as simple as passing your [items] as a List of strings
-  ListChooser(this.items) {
+  ListChooser(this.items, {this.navigationMode = false}) {
     _checkItems();
     //relevant when running from IntelliJ console pane for example
     if (stdin.hasTerminal) {
@@ -22,7 +26,8 @@ class ListChooser {
 
   /// Named constructor mostly for unit testing.
   /// For context and an example see [CLI_Dialog], `README.md` and the `test/` folder.
-  ListChooser.std(this._std_input, this._std_output, this.items) {
+  ListChooser.std(this._std_input, this._std_output, this.items,
+      {this.navigationMode = false}) {
     _checkItems();
     if (stdin.hasTerminal) {
       stdin.echoMode = false;
@@ -38,6 +43,10 @@ class ListChooser {
     _renderList(0, initial: true);
 
     while ((input = _userInput()) != 10) {
+      if (input < 0) {
+        _resetStdin();
+        return ':${-input}';
+      }
       if (input == 65) {
         if (index > 0) {
           index--;
@@ -104,10 +113,23 @@ class ListChooser {
         return byte;
     }
     for (var i = 0; i < 2; i++) {
-      if (_std_input.readByteSync() == 10) {
+      final input = _std_input.readByteSync();
+      if (navigationMode) {
+        if (input == 58) {
+          // 58 = :
+          _std_output.write(':');
+          final inputLine =
+              _std_input.readLineSync(encoding: Encoding.getByName('utf-8'));
+          int lineNumber = int.parse(inputLine.trim());
+          _std_output.writeln('$lineNumber');
+          return -lineNumber; // make the result negative so it can be told apart from normal key codes
+        }
+      }
+      if (input == 10) {
         return 10;
       }
     }
-    return _std_input.readByteSync();
+    final input = _std_input.readByteSync();
+    return input;
   }
 }

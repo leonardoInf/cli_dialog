@@ -12,7 +12,9 @@ You can find the source for this example [here](example/lib/main.dart)
   * [Basic usage](#basic-Usage) 
   * [Boolean questions](#boolean-questions)
   * [List questions](#list-questions)
+  * [Messages](#messages)
   * [Order](#order)
+  * [Navigation mode](#navigation-mode)
 * [Testing](#testing)
 * [How it works](#how-it-works)
 * [Contributing](#contributing)
@@ -85,6 +87,12 @@ void main() {
 
 List questions allow the user to make a selection amongst several strings. `'question'` is the question that will be printed before the selection. `'options'` are the options from which the user chooses exactly one. `'colour'` is the key used to retreive the answer.
 
+### Messages
+
+Messages were added in 0.2.0. They are used to display information to users without prompting them for an answer.
+
+You can use them like any other question using the `messages` keyword parameter or `addQuestion(message, is_message: true)`. It is only optional to include a key if you are not using order.
+
 ### Order
 ```dart
 import 'package:cli_dialog/cli_dialog.dart';
@@ -116,11 +124,22 @@ void main() {
 The optional keyword parameter `order` for the constructor allows you to set a custom order for your questions in the dialog by passing a list with keys in your required order.
 
 If you do not indicate any order then the standard order is applied:
-1. All regular questions as they appear in the `questions` list.
+1. All messages are displayed to the user.
+2. All regular questions.
 2. All boolean questions.
 3. All list questions.
 
-We used the `order` parameter in the this example because otherwise the question 'Do you want to continue' would be asked before 'Where are you from?' according to standard order.
+We used the `order` parameter in this example because otherwise the question 'Do you want to continue' would be asked before 'Where are you from?' according to standard order.
+
+### Navigation mode
+Navigation mode was added in 0.2.0. It allows users to freely navigate through the prompt and repeadetly answer questions if the want to. For the developer it is a matter of setting `navigationMode` to `true`:
+
+```dart
+final dialog = CLI_Dialog(navigationMode: true);
+```
+
+In navigation mode, each question is prepended by an index which shows the user which question he currently answers.
+The user can then prepend a colon to his answer and use these indices to jump to another question, even those he has not answered yet. For instance, answering `:2` makes the user jump to the second question. After answering it, the user will be prompted with the third question (again) etc. Entering a question number which is out of scope finishes the CLI_Dialog and makes it return the answer map.
 
 ## Testing
 
@@ -132,8 +151,8 @@ For this purpose, there is the named constructor `CLI_Dialog.std()` which has tw
 
 `StdinService` and `StdoutService` are classes which are provided with this library. There are always used internally for i/o. If you explicitly use these classes then you will probably want to set the `mock` parameter to `true` which will make these services mock objects. 
 
-Furtermore, it is mostly advised to pass `std_output` to `std_input` using the `informStdout` parameter to inform the StdoutService about standard input in echo mode.
-Details can be observed in the numerous tests I have written (`test/`).
+Furtermore, it is mostly advised to pass `std_output` to `std_input` using the `informStdout` and `isTest` parameter to inform the StdoutService about standard input in echo mode.
+Details can be checked out in the tests I have written (`test/`).
 
 ## How it works
 
@@ -153,7 +172,7 @@ cli_dialog supports Windows. However, there are some minor caveats:
 
 - You have to use 'W' and 'S' keys to navigate instead of arrow up and arrow down
 - Colors look a bit different in command prompt
-- the UTF-16 right indicator is replaced by a simple >
+- The UTF-16 right indicator is replaced by a simple >
 
 ## Acknowledgements
 

@@ -4,22 +4,30 @@ export 'list_chooser.dart';
 import 'services.dart';
 import 'xterm.dart';
 
+enum _questionType { message, question, booleanQuestion, listQuestion }
+
 /// This is the most important class which should usually be instantiated when building CLI dialogs.
 class CLI_Dialog {
   /// This is where the results = answers from the CLI dialog go. This map is updated and returned when calling [ask].
   Map answers = {};
 
   /// This is where the boolean questions are stored during runtime. Feel free to access it like any other list.
-  List<List<String>> booleanQuestions;
+  List booleanQuestions;
 
   /// This is where the list questions are stored during runtime (where the user selects a value). Feel free to access it like any other list.
   List listQuestions;
+
+  /// Messages inform the user without asking a question. A key must be provided for each message if you want to use a custom [order].
+  List messages;
+
+  /// Navigation mode means that every question is displayed with a number which you can use to navigate through questions
+  bool navigationMode;
 
   /// This list contains the order in which the questions are asked in the dialog. Feel free to access it like any other list.
   List<String> order;
 
   /// This is where the regular questions are stored during runtime.
-  List<List<String>> questions;
+  List questions;
 
   /// Indicates the default behaviour of boolean questions when no input (except '\n') is given.
   bool trueByDefault;
@@ -31,11 +39,13 @@ class CLI_Dialog {
   /// There is also [trueByDefault] (false by default) which indicates how booleanQuestions behave if no input is given
   /// There are basic format checks which try to prevent you from passing invalid argmuents.
   CLI_Dialog(
-      {this.questions,
+      {this.messages,
+      this.questions,
       this.booleanQuestions,
       this.listQuestions,
       this.order,
-      this.trueByDefault = false}) {
+      this.trueByDefault = false,
+      this.navigationMode = false}) {
     _checkQuestions();
     _initializeLists();
   }
@@ -49,38 +59,51 @@ class CLI_Dialog {
   /// final dialog = CLI_Dialog.std(std_input, std_output, listQuestions: listQuestions);
   /// ```
   CLI_Dialog.std(this._std_input, this._std_output,
-      {this.questions,
+      {this.messages,
+      this.questions,
       this.booleanQuestions,
       this.listQuestions,
       this.order,
-      this.trueByDefault = false}) {
+      this.trueByDefault = false,
+      this.navigationMode = false}) {
     _checkQuestions();
     _initializeLists();
   }
 
   /// This method is another way of adding questions after instantiating [CLI_Dialog]
-  /// Pass [is_bool] or [is_list] as a named argument to indicate the type of question you are adding
+  /// Pass [is_bool] or [is_list] as a named argument to indicate the type of question you are adding (boolean qualifier).
   ///
   /// ```
   /// final dialog = CLI_Dialog();
   /// dialog.addQuestion([{'question': 'How are you?', options: ['Good', 'Not so good']}, 'mood'], is_list: true);
   /// ```
-  void addQuestion(p_question, key, {is_boolean = false, is_list = false}) {
+  void addQuestion(p_question, key,
+      {is_boolean = false, is_list = false, is_message = false}) {
+    if ((is_boolean ? 1 : 0) + (is_list ? 1 : 0) + (is_message ? 1 : 0) > 1) {
+      throw ArgumentError(
+          "A question can not have more than one boolean qualifier.");
+    }
+    final newItem = [p_question, key];
     if (is_boolean) {
-      booleanQuestions.add([p_question, key]);
+      booleanQuestions.add(newItem);
     } else if (is_list) {
-      listQuestions.add(p_question);
+      listQuestions.add(newItem);
+    } else if (is_message) {
+      messages.add(newItem);
     } else {
-      questions.add([p_question, key]);
+      questions.add(newItem);
     }
   }
 
   /// Same as [addQuestion] but you can add multiple questions (of the same type)
-  void addQuestions(p_questions, {is_boolean = false, is_list = false}) {
+  void addQuestions(p_questions,
+      {is_boolean = false, is_list = false, is_message = false}) {
     if (is_boolean) {
       booleanQuestions.addAll(p_questions);
     } else if (is_list) {
       listQuestions.addAll(p_questions);
+    } else if (is_message) {
+      messages.addAll(p_questions);
     } else {
       questions.addAll(p_questions);
     }
@@ -96,18 +119,12 @@ class CLI_Dialog {
   /// print('Your name is ${answers["name"]}');
   /// ```
   Map ask() {
+    _navigationIndex = 0; // reset navigation
     if (order == null) {
       _standardOrder();
     } else {
-      for (var i = 0; i < order.length; i++) {
-        final questionAndFunction = _findQuestion(order[i]);
-        if (questionAndFunction != null) {
-          questionAndFunction[1](
-              questionAndFunction[0][0], questionAndFunction[0][1]);
-        }
-      }
+      _customOrder();
     }
-
     return answers;
   }
 
@@ -151,7 +168,27 @@ class CLI_Dialog {
     }
   }
 
+  bool _checkNavigation(String input) {
+    if (navigationMode) {
+      if (input[0] == ':') {
+        // -1 cause it will be incremented in the for loop and -1 because of zero index
+        _navigationIndex = int.parse(input.substring(1)) - 2 + _messagesBefore;
+        _std_output.writeln('');
+        return true;
+      }
+      return false;
+    }
+    return false;
+  }
+
   void _checkQuestions() {
+    [messages].forEach((element) {
+      if (element is List && element.length > 2) {
+        throw ArgumentError(
+            'Each message is either just a string or a list with a string and a key.');
+      }
+    });
+
     [questions, booleanQuestions, listQuestions].forEach((entry) {
       if (entry != null) {
         entry.forEach((element) {
@@ -197,9 +234,35 @@ class CLI_Dialog {
 
   String _comment(str) => XTerm.gray(str);
 
+  void _customOrder() {
+    if (navigationMode) {
+      _iterateCustomOrder(getCustomNavList());
+    } else {
+      _customOrderWithoutNavigation();
+    }
+  }
+
+  void _customOrderWithoutNavigation() {
+    for (var i = 0; i < order.length; i++) {
+      final questionAndFunction = _findQuestion(order[i]);
+      if (questionAndFunction != null) {
+        questionAndFunction[1](
+            questionAndFunction[0][0], questionAndFunction[0][1]);
+      }
+    }
+  }
+
+  void _displayMessage(msg, key) {
+    if (msg is String) {
+      _std_output.writeln(_comment(msg));
+    } else
+      _std_output.writeln(_comment(msg[0]));
+  }
+
   dynamic _findQuestion(key) {
     dynamic ret;
     [
+      [messages, _displayMessage],
       [questions, _askQuestion],
       [booleanQuestions, _askBooleanQuestion],
       [listQuestions, _askListQuestion]
@@ -216,23 +279,44 @@ class CLI_Dialog {
   }
 
   void _getAnswer(question, key) {
-    answers[key] = _getInput(_question(question));
-    _std_output.writeln('\r' +
-        _question(question) +
-        XTerm.teal(answers[key]) +
-        XTerm.blankRemaining());
+    final input = _getInput(_question(question));
+    if (!_checkNavigation(input)) {
+      answers[key] = input;
+      _std_output.writeln('\r' +
+          _question(question) +
+          XTerm.teal(answers[key]) +
+          XTerm.blankRemaining());
+    }
   }
 
   void _getBooleanAnswer(question, key) {
     var input = _getInput(_booleanQuestion(question), acceptEmptyAnswer: true);
-    if (input.isEmpty) {
-      answers[key] = trueByDefault;
-    } else {
-      answers[key] = (input[0] == 'y' || input[0] == 'Y');
+    if (!_checkNavigation(input)) {
+      if (input.isEmpty) {
+        answers[key] = trueByDefault;
+      } else {
+        answers[key] = (input[0] == 'y' || input[0] == 'Y');
+      }
+      var replaceStr =
+          '\r' + _booleanQuestion(question) + XTerm.blankRemaining();
+      replaceStr += (answers[key] ? XTerm.teal('Yes') : XTerm.teal('No'));
+      _std_output.writeln(replaceStr);
     }
-    var replaceStr = '\r' + _booleanQuestion(question) + XTerm.blankRemaining();
-    replaceStr += (answers[key] ? XTerm.teal('Yes') : XTerm.teal('No'));
-    _std_output.writeln(replaceStr);
+  }
+
+  Function _getFunctionForQuestionType(type) {
+    if (type == _questionType.message) {
+      return _displayMessage;
+    }
+    if (type == _questionType.question) {
+      return _askQuestion;
+    }
+    if (type == _questionType.booleanQuestion) {
+      return _askBooleanQuestion;
+    }
+    if (type == _questionType.listQuestion) {
+      return _askListQuestion;
+    }
   }
 
   String _getInput(formattedQuestion, {acceptEmptyAnswer = false}) {
@@ -253,14 +337,45 @@ class CLI_Dialog {
   }
 
   void _getListAnswer(options, key) {
-    var chooser = ListChooser.std(_std_input, _std_output, options);
-    answers[key] = chooser.choose();
+    var chooser = ListChooser.std(_std_input, _std_output, options,
+        navigationMode: navigationMode);
+    final input = chooser.choose();
+    if (!_checkNavigation(input)) {
+      answers[key] = input;
+    }
   }
 
-  int _getSize(some_collection) =>
-      (some_collection != null ? some_collection.length : 0);
+  List _getStdNavList() =>
+      [...messages, ...questions, ...booleanQuestions, ...listQuestions];
 
+  List getCustomNavList() {
+    var navList = [];
+    order.forEach((key) {
+      navList.add(_simpleSearch(key));
+    });
+    return navList;
+  }
+
+  _questionType _getQuestionType(item) {
+    if (messages.contains(item)) {
+      return _questionType.message;
+    }
+    if (questions.contains(item)) {
+      return _questionType.question;
+    }
+    if (booleanQuestions.contains(item)) {
+      return _questionType.booleanQuestion;
+    }
+    if (listQuestions.contains(item)) {
+      return _questionType.listQuestion;
+    }
+  }
+
+  // this is needed because only unmodifiable lists can be used as default values
   void _initializeLists() {
+    if (messages == null) {
+      messages = [];
+    }
     if (booleanQuestions == null) {
       booleanQuestions = [];
     }
@@ -272,15 +387,62 @@ class CLI_Dialog {
     }
   }
 
+  void _iterateCustomOrder(List navlist) {
+    for (_navigationIndex;
+        _navigationIndex < navlist.length;
+        _navigationIndex++) {
+      final element = navlist[_navigationIndex];
+      _getFunctionForQuestionType(_getQuestionType(element))(
+          element[0], element[1]);
+    }
+  }
+
   String _listQuestion(str) => _question(str) + _comment('(Use arrow keys)');
 
-  String _question(str) => XTerm.green('?') + ' ' + XTerm.bold(str) + ' ';
+  int get _messagesBefore {
+    int messagesBefore = 0;
+    if (navigationMode && order != null) {
+      for (var i = _navigationIndex - 1; i >= 0; i--) {
+        if (_getQuestionType(_simpleSearch(order[i])) ==
+            _questionType.message) {
+          messagesBefore++;
+        }
+      }
+    }
+    return messagesBefore;
+  }
 
+  int _navigationIndex = 0;
+
+  String _question(str) =>
+      (navigationMode != null && navigationMode
+          ? '(${_navigationIndex + 1 - _messagesBefore}) '
+          : '') +
+      XTerm.green('?') +
+      ' ' +
+      XTerm.bold(str) +
+      ' ';
   dynamic _search(list, fn, key) {
     dynamic ret;
     list.forEach((element) {
       if (element[1] == key) {
         ret = [element, fn];
+        return; // corresponds to a break in a normal for-loop
+      }
+    });
+    return ret;
+  }
+
+  dynamic _simpleSearch(String key) {
+    dynamic ret;
+    [messages, questions, booleanQuestions, listQuestions].forEach((list) {
+      list.forEach((element) {
+        if (element[1] == key) {
+          ret = element;
+          return; // break
+        }
+      });
+      if (ret != null) {
         return;
       }
     });
@@ -289,13 +451,24 @@ class CLI_Dialog {
 
   // Standard behaviour if no order is given
   void _standardOrder() {
-    for (var i = 0; i < _getSize(questions); i++) {
+    if (navigationMode) {
+      _iterateCustomOrder(_getStdNavList());
+    } else {
+      _standardOrderNoNavigation();
+    }
+  }
+
+  void _standardOrderNoNavigation() {
+    for (var i = 0; i < messages.length; i++) {
+      _displayMessage(messages[i], messages[i][1]);
+    }
+    for (var i = 0; i < questions.length; i++) {
       _askQuestion(questions[i][0], questions[i][1]);
     }
-    for (var i = 0; i < _getSize(booleanQuestions); i++) {
+    for (var i = 0; i < booleanQuestions.length; i++) {
       _askBooleanQuestion(booleanQuestions[i][0], booleanQuestions[i][1]);
     }
-    for (var i = 0; i < _getSize(listQuestions); i++) {
+    for (var i = 0; i < listQuestions.length; i++) {
       _askListQuestion(listQuestions[i][0], listQuestions[i][1]);
     }
   }

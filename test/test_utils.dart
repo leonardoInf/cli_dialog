@@ -35,3 +35,11 @@ String questionNList(question, options, index) =>
     XTerm.gray('(Use arrow keys)') +
     '\n' +
     markedList(options, index);
+
+String message(msg) {
+  if (msg is List) {
+    return XTerm.gray(msg[0]);
+  } else {
+    return XTerm.gray(msg);
+  }
+}
