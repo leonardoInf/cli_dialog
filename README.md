@@ -1,7 +1,7 @@
 # cli_dialog
 [![Build Status](https://travis-ci.com/leonardoInf/cli_dialog.svg?branch=master)](https://travis-ci.com/leonardoInf/cli_dialog)
 
-A Dart package which allows you to go beyond usual [Inquirer.js](https://github.com/SBoudrias/Inquirer.js/) prompts.
+A Dart package which allows you to use [Inquirer.js](https://github.com/SBoudrias/Inquirer.js/) prompts with some additional features.
 
 This package does not have any direct dependencies. The following GIF shows a CLI dialog which was created using this library. You can also visit the library page on [pub.dev](https://pub.dev/packages/cli_dialog).
 
