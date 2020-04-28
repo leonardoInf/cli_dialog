@@ -1,7 +1,8 @@
 # cli_dialog
 [![Build Status](https://travis-ci.com/leonardoInf/cli_dialog.svg?branch=master)](https://travis-ci.com/leonardoInf/cli_dialog)
 
-A Dart package which allows you to easily create Angular CLI style CLI dialogs.
+A Dart package which allows you to go beyond usual [Inquirer.js](https://github.com/SBoudrias/Inquirer.js/) prompts.
+
 This package does not have any direct dependencies. The following GIF shows a CLI dialog which was created using this library. You can also visit the library page on [pub.dev](https://pub.dev/packages/cli_dialog).
 
 ![Demo of cli_dialog](doc/cli_dialog_demo.gif)
@@ -19,7 +20,7 @@ You can find the source for this example [here](example/lib/main.dart)
 * [How it works](#how-it-works)
 * [Contributing](#contributing)
 * [Windows](#windows)
-* [Acknowledgements](#acknowledgements)
+* [Acknowledgements and Alternatives](#acknowledgements-and-alternatives)
 
 
 ## Usage
@@ -174,7 +175,11 @@ cli_dialog supports Windows. However, there are some minor caveats:
 - Colors look a bit different in command prompt
 - The UTF-16 right indicator is replaced by a simple >
 
-## Acknowledgements
+## Acknowledgements and Alternatives
 
-The design used for the dialog is copied from the initial dialog in the `ng` tool. Click [here](https://cli.angular.io/) for more information about Angular CLI.
+This library is more a less a Dart port of [Inquirer.js](https://github.com/SBoudrias/Inquirer.js/).
+
+There is [dart_inquirer](https://pub.dev/packages/dart_inquirer) which is not developed any more
+(even the Github repository was deleted by the author). It works fine but it has less features than this package
+(no colors, no navigation, no resume, no question mark etc.).
 

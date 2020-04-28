@@ -23,6 +23,10 @@ class CLI_Dialog {
   /// Navigation mode means that every question is displayed with a number which you can use to navigate through questions
   bool navigationMode;
 
+  /// Resume moed means that progress in your CLI dialog is automatically saved with each question so you can savely
+  /// Quit and resume later. Specify a file path where you progress will be saved and loaded from
+  String resume;
+
   /// This list contains the order in which the questions are asked in the dialog. Feel free to access it like any other list.
   List<String> order;
 
@@ -45,7 +49,8 @@ class CLI_Dialog {
       this.listQuestions,
       this.order,
       this.trueByDefault = false,
-      this.navigationMode = false}) {
+      this.navigationMode = false,
+      this.resume = ""}) {
     _checkQuestions();
     _initializeLists();
   }
@@ -317,6 +322,7 @@ class CLI_Dialog {
     if (type == _questionType.listQuestion) {
       return _askListQuestion;
     }
+    return null;
   }
 
   String _getInput(formattedQuestion, {acceptEmptyAnswer = false}) {
@@ -369,6 +375,7 @@ class CLI_Dialog {
     if (listQuestions.contains(item)) {
       return _questionType.listQuestion;
     }
+    return null;
   }
 
   // this is needed because only unmodifiable lists can be used as default values
