@@ -73,6 +73,25 @@ class ListChooser {
     }
   }
 
+  int _checkNavigation() {
+    final input = _std_input.readByteSync();
+    if (navigationMode) {
+      if (input == 58) {
+        // 58 = :
+        _std_output.write(':');
+        final inputLine =
+            _std_input.readLineSync(encoding: Encoding.getByName('utf-8'));
+        int lineNumber = int.parse(inputLine.trim());
+        _std_output.writeln('$lineNumber');
+        return -lineNumber; // make the result negative so it can be told apart from normal key codes
+      } else {
+        return input;
+      }
+    } else {
+      return input;
+    }
+  }
+
   void _deletePreviousList() {
     for (var i = 0; i < items.length; i++) {
       _std_output.write(XTerm.moveUp(1) + XTerm.blankRemaining());
@@ -102,34 +121,35 @@ class ListChooser {
   }
 
   int _userInput() {
-    if (Platform.isWindows) {
-      var byte = _std_input.readByteSync();
-
-      if (byte == Keys.enter) return 10;
-      if (byte == Keys.arrowUp[0]) return 65;
-      if (byte == Keys.arrowDown[0])
-        return 66;
-      else
-        return byte;
+    final navigationResult =
+        _checkNavigation(); // just receives the read byte, if not successful,
+    if (navigationResult < 0) {
+      // < 0 = user has navigated
+      return navigationResult;
     }
-    for (var i = 0; i < 2; i++) {
-      final input = _std_input.readByteSync();
-      if (navigationMode) {
-        if (input == 58) {
-          // 58 = :
-          _std_output.write(':');
-          final inputLine =
-              _std_input.readLineSync(encoding: Encoding.getByName('utf-8'));
-          int lineNumber = int.parse(inputLine.trim());
-          _std_output.writeln('$lineNumber');
-          return -lineNumber; // make the result negative so it can be told apart from normal key codes
-        }
-      }
-      if (input == 10) {
+
+    if (Platform.isWindows) {
+      if (navigationResult == Keys.enter) {
         return 10;
       }
+      if (navigationResult == Keys.arrowUp[0]) {
+        return 65;
+      }
+      if (navigationResult == Keys.arrowDown[0]) {
+        return 66;
+      } else {
+        return navigationResult;
+      }
+    } else {
+      if (navigationResult == 10) {
+        return 10;
+      }
+      final anotherByte = _std_input.readByteSync();
+      if (anotherByte == 10) {
+        return 10;
+      }
+      final input = _std_input.readByteSync();
+      return input;
     }
-    final input = _std_input.readByteSync();
-    return input;
   }
 }
