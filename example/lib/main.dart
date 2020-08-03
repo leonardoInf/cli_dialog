@@ -1,12 +1,8 @@
 import 'package:cli_dialog/cli_dialog.dart';
 
 dynamic runExample([stdin_service, stdout_service]) {
-  if (stdin_service == null) {
-    stdin_service = StdinService();
-  }
-  if (stdout_service == null) {
-    stdout_service = StdoutService();
-  }
+    stdin_service ??= StdinService();
+    stdout_service ??= StdoutService();
 
   const questions = [
     ['What name would you like to use for the project?', 'project_name']
@@ -31,7 +27,7 @@ dynamic runExample([stdin_service, stdout_service]) {
     ]
   ];
 
-  CLI_Dialog dialog = CLI_Dialog.std(stdin_service, stdout_service,
+  final dialog = CLI_Dialog.std(stdin_service, stdout_service,
       questions: questions,
       booleanQuestions: booleanQuestions,
       listQuestions: listQuestions);
@@ -39,7 +35,7 @@ dynamic runExample([stdin_service, stdout_service]) {
   return dialog.ask();
 }
 
-String report(answers, {do_print: true}) {
+String report(answers, {do_print=true}) {
   var output = StringBuffer();
   output.writeln('');
   output.writeln('Your project name is ${answers["project_name"]}.');

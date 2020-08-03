@@ -11,7 +11,7 @@ void main() {
 
     mockStdin.addToBuffer([
       'Some project\n',
-      "Yes\n",
+      'Yes\n',
       ...Keys.arrowDown,
       ...Keys.arrowDown,
       ...Keys.arrowUp,

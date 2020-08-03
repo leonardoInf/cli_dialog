@@ -8,7 +8,7 @@ void main() {
 
   test('Basic functionality', () {
     std_in = StdinService(mock: true);
-    final entries = ["Entry1\n", "Entry2\r", Keys.enter];
+    final entries = ['Entry1\n', 'Entry2\r', Keys.enter];
     std_in.addToBuffer(entries);
     final line1 = std_in.readLineSync();
     final line2 = std_in.readLineSync();
