@@ -1,7 +1,7 @@
 export 'package:cli_dialog/src/services.dart';
 import 'package:cli_dialog/src/xterm.dart';
 
-String booleanQnA(question, answer, {trueByDefault=false}) =>
+String booleanQnA(question, answer, {trueByDefault = false}) =>
     XTerm.green('?') +
     ' ' +
     XTerm.bold(question) +
@@ -16,8 +16,7 @@ String markedList(options, index) {
   for (var i = 0; i < options.length; i++) {
     if (i == index) {
       output.writeln(XTerm.rightIndicator() + ' ' + XTerm.teal(options[i]));
-    }
-    else{
+    } else {
       output.writeln('  ' + options[i]);
     }
   }
