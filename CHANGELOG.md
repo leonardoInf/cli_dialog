@@ -6,3 +6,4 @@
 - 0.1.4: Add support for Windows (with caveats).
 - 0.1.5: Fix addQuestion() and create example for it. Fix tests and enable Travis CI for Windows.
 - 0.2.0: Add navigation mode and messages.
+- 0.2.1: Use 'stricter than effective' linting

@@ -38,7 +38,7 @@ class ListChooser {
   /// Similar to [ask] this actually triggers the dialog and returns the chosen item = option.
   String choose() {
     int input;
-    int index = 0;
+    var index = 0;
 
     _renderList(0, initial: true);
 
@@ -81,7 +81,7 @@ class ListChooser {
         _std_output.write(':');
         final inputLine =
             _std_input.readLineSync(encoding: Encoding.getByName('utf-8'));
-        int lineNumber = int.parse(inputLine.trim());
+        final lineNumber = int.parse(inputLine.trim());
         _std_output.writeln('$lineNumber');
         return -lineNumber; // make the result negative so it can be told apart from normal key codes
       } else {

@@ -2,7 +2,7 @@ import 'dart:io';
 
 /// Service to simulate stdout. Use it in unit tests.
 class StdoutService {
-  /// Indicates if this StdoutService is mock mode, see also [StdinService].
+  /// Indicates if this StdoutService is in mock mode, see also [StdinService].
   bool mock;
 
   /// The default and only constructor where you can indicate
@@ -34,7 +34,7 @@ class StdoutService {
   /// Empty strings at the end are removed.
   /// For a string version see [getStringOutput]
   List getOutput() {
-    List ret = [];
+    final ret = [];
     _output.forEach((element) {
       if (element.isNotEmpty) {
         ret.add(element);
@@ -50,8 +50,8 @@ class StdoutService {
   // END OF PUBLIC API
 
   var _buffer = '';
-  var _cursor = {'x': 0, 'y': 0};
-  var _output = [''];
+  final _cursor = {'x': 0, 'y': 0};
+  final _output = [''];
 
   void _addChar() {
     var currLine = _output[_cursor['y']].split('');

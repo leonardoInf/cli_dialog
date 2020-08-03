@@ -62,7 +62,7 @@ class StdinService {
 
   bool _isTest = false;
 
-  var _mockBuffer = [];
+  final _mockBuffer = [];
   bool _getEchomode() {
     if (!stdin.hasTerminal) {
       return false;

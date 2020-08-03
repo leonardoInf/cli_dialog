@@ -50,7 +50,7 @@ class CLI_Dialog {
       this.order,
       this.trueByDefault = false,
       this.navigationMode = false,
-      this.resume = ""}) {
+      this.resume = ''}) {
     _checkQuestions();
     _initializeLists();
   }
@@ -86,7 +86,7 @@ class CLI_Dialog {
       {is_boolean = false, is_list = false, is_message = false}) {
     if ((is_boolean ? 1 : 0) + (is_list ? 1 : 0) + (is_message ? 1 : 0) > 1) {
       throw ArgumentError(
-          "A question can not have more than one boolean qualifier.");
+          'A question can not have more than one boolean qualifier.');
     }
     final newItem = [p_question, key];
     if (is_boolean) {
@@ -260,8 +260,9 @@ class CLI_Dialog {
   void _displayMessage(msg, key) {
     if (msg is String) {
       _std_output.writeln(_comment(msg));
-    } else
+    } else {
       _std_output.writeln(_comment(msg[0]));
+    }
   }
 
   dynamic _findQuestion(key) {
@@ -380,18 +381,10 @@ class CLI_Dialog {
 
   // this is needed because only unmodifiable lists can be used as default values
   void _initializeLists() {
-    if (messages == null) {
-      messages = [];
-    }
-    if (booleanQuestions == null) {
-      booleanQuestions = [];
-    }
-    if (listQuestions == null) {
-      listQuestions = [];
-    }
-    if (questions == null) {
-      questions = [];
-    }
+    messages ??= [];
+    booleanQuestions ??= [];
+    listQuestions ??= [];
+    questions ??= [];
   }
 
   void _iterateCustomOrder(List navlist) {
@@ -407,7 +400,7 @@ class CLI_Dialog {
   String _listQuestion(str) => _question(str) + _comment('(Use arrow keys)');
 
   int get _messagesBefore {
-    int messagesBefore = 0;
+    var messagesBefore = 0;
     if (navigationMode && order != null) {
       for (var i = _navigationIndex - 1; i >= 0; i--) {
         if (_getQuestionType(_simpleSearch(order[i])) ==
