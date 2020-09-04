@@ -1,7 +1,7 @@
 # cli_dialog
 
 [![Build Status](https://travis-ci.com/leonardoInf/cli_dialog.svg?branch=master)](https://travis-ci.com/leonardoInf/cli_dialog)
-[![Code coverage](coverage_badge.svg)](coverage_badge.svg)
+[![Coverage Status](https://coveralls.io/repos/github/leonardoInf/cli_dialog/badge.svg)](https://coveralls.io/github/leonardoInf/cli_dialog)
 
 A Dart package which allows you to use [Inquirer.js](https://github.com/SBoudrias/Inquirer.js/) prompts with some additional features.
 
