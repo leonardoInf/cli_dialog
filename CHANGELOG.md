@@ -9,3 +9,4 @@
 - 0.2.1: Use 'stricter than effective' linting
 - 0.3.0: Fix issue with order and improve some comments
 - 0.3.1: Add code coverage badge, clean up repo
+- 0.3.2: Use Coveralls
