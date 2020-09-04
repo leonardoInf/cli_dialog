@@ -1,6 +1,6 @@
 name: cli_dialog
 description: Create beautiful and powerful CLI prompts in Inquirer.js style and test them.
-version: 0.3.2
+version: 0.3.3
 homepage: https://github.com/leonardoInf/cli_dialog
 
 environment:
