@@ -15,8 +15,8 @@ dart_task:
   - dartfmt
   - dartanalyzer: --fatal-infos --fatal-warnings .
 after_success:
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then pub run test_coverage ; fi
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then pub run coveralls coverage/lcov.info ; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then pub run test_coverage ; touch done; fi
+  - if [ ! -f done ]; then if [ "$TRAVIS_OS_NAME" = "osx" ]; then pub run coveralls coverage/lcov.info ; fi ; fi
 
 cache:
   directories:
