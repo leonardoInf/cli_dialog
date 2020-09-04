@@ -4,9 +4,10 @@ version: 0.3.1
 homepage: https://github.com/leonardoInf/cli_dialog
 
 environment:
-  sdk: ">=2.3.0 <3.0.0"
+  sdk: ">=2.8.0 <3.0.0"
 
 dev_dependencies:
+  coveralls: ^5.9.0
   test: ^1.14.2
   pedantic: ^1.9.0
   example:
