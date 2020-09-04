@@ -14,7 +14,7 @@ dart_task:
   - test: .
   - dartfmt
   - dartanalyzer: --fatal-infos --fatal-warnings .
-script:
+after_success:
   - pub run test_coverage
   - pub run coveralls coverage/lcov.info
 
