@@ -114,7 +114,7 @@ class CLI_Dialog {
     }
   }
 
-  /// Use this method to retreive the results from your CLI dialog.
+  /// Use this method to retrieve the results from your CLI dialog.
   /// A map is being returned which you can query using your keys.
   ///
   /// ```
@@ -176,8 +176,10 @@ class CLI_Dialog {
   bool _checkNavigation(String input) {
     if (navigationMode) {
       if (input[0] == ':') {
-        // -1 cause it will be incremented in the for loop and -1 because of zero index
-        _navigationIndex = int.parse(input.substring(1)) - 2 + _messagesBefore;
+        // -1 because of zero index
+        _navigationIndex = int.parse(input.substring(1)) - 1;
+        // -1 because _navigationIndex will be incremented in _iterateCustomOrder()
+        _navigationIndex += _messagesBefore - 1;
         _std_output.writeln('');
         return true;
       }

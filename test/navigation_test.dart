@@ -48,7 +48,7 @@ void main() {
   });
 
   test('Messages are excluded from navigation', () {
-    std_input.addToBuffer([':2\n', ':1\n', 'Some input\n', 'Yep\n']);
+    std_input.addToBuffer([':2\n', ':1\n', 'Some input\n', 'Never\n']);
     final messages = [
       ['Hello', 'msg1'],
       ['Hi', 'msg2']
@@ -60,7 +60,7 @@ void main() {
     dialog.addQuestion('Can you answer this question?', 'question1',
         is_boolean: true);
     dialog.addQuestion('I expect some input here:', 'question2');
-    final answer = dialog.ask();
-    print(answer);
+    final answers = dialog.ask();
+    expect(answers, {'question1': false, 'question2': 'Some input'});
   });
 }
