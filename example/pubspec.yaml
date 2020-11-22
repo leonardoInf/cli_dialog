@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   cli_dialog:
+  dart_console: ^0.6.2
 
 dev_dependencies:
   test: ^1.14.2
@@ -15,5 +16,3 @@ dev_dependencies:
 dependency_overrides:
   cli_dialog:
     path: ../
-
-
