@@ -1,5 +1,9 @@
 import 'dart:io';
 import 'package:cli_dialog/src/stdout_service.dart';
+import 'package:dart_console/dart_console.dart';
+import 'keys.dart';
+
+final console = Console();
 
 /// Service to simulate stdin. Use it in unit tests.
 class StdinService {
@@ -42,7 +46,25 @@ class StdinService {
       _mockBuffer.removeAt(0);
       return (ret is int ? ret : int.parse(ret));
     }
-    return stdin.readByteSync();
+    int key;
+    if (Platform.isWindows) {
+      var key_input = console.readKey().toString();
+      if (key_input.startsWith('ControlCharacter')) {
+        key_input = key_input.split('.')[1];
+        if (key_input == 'arrowUp') {
+          return WIN_UP;
+        } else if (key_input == 'arrowDown') {
+          return WIN_DOWN;
+        } else if (key_input == 'enter') {
+          return WIN_ENTER;
+        }
+      } else {
+        return key_input.codeUnitAt(0);
+      }
+    } else {
+      key = stdin.readByteSync();
+    }
+    return key;
   }
 
   /// Use this to read a whole line, whether in [mock] mode or with real stdin.

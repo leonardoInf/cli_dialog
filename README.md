@@ -6,7 +6,7 @@
 
 A Dart package which allows you to use [Inquirer.js](https://github.com/SBoudrias/Inquirer.js/) prompts with some additional features.
 
-This package does not have any direct dependencies. The following GIF shows a CLI dialog which was created using this library. You can also visit the library page on [pub.dev](https://pub.dev/packages/cli_dialog).
+The following GIF shows a CLI dialog which was created using this library. You can also visit the library page on [pub.dev](https://pub.dev/packages/cli_dialog).
 
 ![Demo of cli_dialog](doc/cli_dialog_demo.gif)
 

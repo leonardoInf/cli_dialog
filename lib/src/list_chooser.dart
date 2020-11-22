@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'services.dart';
 import 'xterm.dart';
+import 'keys.dart';
 
 /// Implementation of list questions. Can be used without [CLI_Dialog].
 class ListChooser {
@@ -42,16 +43,16 @@ class ListChooser {
 
     _renderList(0, initial: true);
 
-    while ((input = _userInput()) != 10) {
+    while ((input = _userInput()) != ENTER) {
       if (input < 0) {
         _resetStdin();
         return ':${-input}';
       }
-      if (input == 65) {
+      if (input == ARROW_UP) {
         if (index > 0) {
           index--;
         }
-      } else if (input == 66) {
+      } else if (input == ARROW_DOWN) {
         if (index < items.length - 1) {
           index++;
         }
@@ -130,23 +131,23 @@ class ListChooser {
 
     if (Platform.isWindows) {
       if (navigationResult == Keys.enter) {
-        return 10;
+        return ENTER;
       }
       if (navigationResult == Keys.arrowUp[0]) {
-        return 65;
+        return ARROW_UP;
       }
       if (navigationResult == Keys.arrowDown[0]) {
-        return 66;
+        return ARROW_DOWN;
       } else {
         return navigationResult;
       }
     } else {
-      if (navigationResult == 10) {
-        return 10;
+      if (navigationResult == ENTER) {
+        return ENTER;
       }
       final anotherByte = _std_input.readByteSync();
-      if (anotherByte == 10) {
-        return 10;
+      if (anotherByte == ENTER) {
+        return ENTER;
       }
       final input = _std_input.readByteSync();
       return input;
