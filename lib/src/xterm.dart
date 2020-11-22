@@ -2,16 +2,14 @@ import 'dart:io';
 import 'keys.dart';
 
 /// Abstract class providing some key codes which can be statically accessed.
-/// Please note that key codes differ on Windows and thatt WASD must be used on Windows
-/// because arrow keys currently are not supported.
 abstract class Keys {
   /// Arrow down. Consists of three bytes.
-  /// On Windows arrowDown corresponds to the 's' character.
+  /// For historical reasons, you can also use 's' instead of arrow down on Windows.
   /// It is packed into a single element list in order to not break the spread syntax.
   static final arrowDown = Platform.isWindows ? [WIN_DOWN] : [27, 91, 66];
 
   /// Arrows up. Consists of three bytes in Unix like systems (including MacOS).
-  /// On Windows arrowUp corresponds to the 'w' character.
+  /// For historical reasons, you can also use 'w' insted of arrow up on Windows.
   /// It is packed into a single element list in order to not break the spread syntax.
   static final arrowUp = Platform.isWindows ? [WIN_UP] : [27, 91, 65];
 
