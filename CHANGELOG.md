@@ -12,3 +12,4 @@
 - 0.3.2: Use Coveralls
 - 0.3.3: Add badge for pub version
 - 0.4.0: Introduce arrow keys for Windows. 's' and 'w' are kept on Windows for backwards-compability.
+- 0.5.0: 'dart migrate' and update README

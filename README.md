@@ -188,3 +188,5 @@ This library is more a less a Dart port of [Inquirer.js](https://github.com/SBou
 There is [dart_inquirer](https://pub.dev/packages/dart_inquirer) which is not developed any more
 (even the Github repository was deleted by the author). It works fine but it has less features than this package
 (no colors, no navigation, no resume, no question mark etc.).
+
+I also found [interact](https://pub.dev/packages/interact) but I have not tested it.
