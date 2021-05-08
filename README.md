@@ -176,9 +176,8 @@ Please format your code using `dartfmt -w .` (this is also covered by `lint.sh`)
 
 ## Windows
 
-cli_dialog supports Windows. However, there are some minor caveats:
+cli_dialog supports Windows.
 
-- You have to use 'W' and 'S' keys to navigate instead of arrow up and arrow down
 - Colors look a bit different in command prompt
 - The UTF-16 right indicator is replaced by a simple >
 
