@@ -12,26 +12,26 @@ class CLI_Dialog {
   Map answers = {};
 
   /// This is where the boolean questions are stored during runtime. Feel free to access it like any other list.
-  List booleanQuestions;
+  List? booleanQuestions;
 
   /// This is where the list questions are stored during runtime (where the user selects a value). Feel free to access it like any other list.
-  List listQuestions;
+  List? listQuestions;
 
   /// Messages inform the user without asking a question. A key must be provided for each message if you want to use a custom [order].
-  List messages;
+  List? messages;
 
   /// Navigation mode means that every question is displayed with a number which you can use to navigate through questions
   bool navigationMode;
 
   /// Resume moed means that progress in your CLI dialog is automatically saved with each question so you can savely
   /// Quit and resume later. Specify a file path where you progress will be saved and loaded from
-  String resume;
+  String? resume;
 
   /// This list contains the order in which the questions are asked in the dialog. Feel free to access it like any other list.
-  List<String> order;
+  List<String>? order;
 
   /// This is where the regular questions are stored during runtime.
-  List questions;
+  List? questions;
 
   /// Indicates the default behaviour of boolean questions when no input (except '\n') is given.
   bool trueByDefault;
@@ -90,13 +90,13 @@ class CLI_Dialog {
     }
     final newItem = [p_question, key];
     if (is_boolean) {
-      booleanQuestions.add(newItem);
+      booleanQuestions!.add(newItem);
     } else if (is_list) {
-      listQuestions.add(newItem);
+      listQuestions!.add(newItem);
     } else if (is_message) {
-      messages.add(newItem);
+      messages!.add(newItem);
     } else {
-      questions.add(newItem);
+      questions!.add(newItem);
     }
   }
 
@@ -104,13 +104,13 @@ class CLI_Dialog {
   void addQuestions(p_questions,
       {is_boolean = false, is_list = false, is_message = false}) {
     if (is_boolean) {
-      booleanQuestions.addAll(p_questions);
+      booleanQuestions!.addAll(p_questions);
     } else if (is_list) {
-      listQuestions.addAll(p_questions);
+      listQuestions!.addAll(p_questions);
     } else if (is_message) {
-      messages.addAll(p_questions);
+      messages!.addAll(p_questions);
     } else {
-      questions.addAll(p_questions);
+      questions!.addAll(p_questions);
     }
   }
 
@@ -222,7 +222,7 @@ class CLI_Dialog {
     });
 
     if (listQuestions != null) {
-      listQuestions.forEach((element) {
+      listQuestions!.forEach((element) {
         if (element[0]['question'] is! String) {
           throw ArgumentError('Your question must be a String.');
         }
@@ -250,8 +250,8 @@ class CLI_Dialog {
   }
 
   void _customOrderWithoutNavigation() {
-    for (var i = 0; i < order.length; i++) {
-      final questionAndFunction = _findQuestion(order[i]);
+    for (var i = 0; i < order!.length; i++) {
+      final questionAndFunction = _findQuestion(order![i]);
       if (questionAndFunction != null) {
         questionAndFunction[1](
             questionAndFunction[0][0], questionAndFunction[0][1]);
@@ -312,7 +312,7 @@ class CLI_Dialog {
     }
   }
 
-  Function _getFunctionForQuestionType(type) {
+  Function? _getFunctionForQuestionType(type) {
     if (type == _questionType.message) {
       return _displayMessage;
     }
@@ -333,13 +333,14 @@ class CLI_Dialog {
     if (!acceptEmptyAnswer) {
       while (input.isEmpty) {
         input = _std_input
-            .readLineSync(encoding: Encoding.getByName('utf-8'))
+            .readLineSync(encoding: Encoding.getByName('utf-8'))!
             .trim();
         _std_output.write(XTerm.moveUp(1) + formattedQuestion);
       }
     } else {
-      input =
-          _std_input.readLineSync(encoding: Encoding.getByName('utf-8')).trim();
+      input = _std_input
+          .readLineSync(encoding: Encoding.getByName('utf-8'))!
+          .trim();
       _std_output.write(XTerm.moveUp(1) + formattedQuestion);
     }
     return input;
@@ -355,27 +356,27 @@ class CLI_Dialog {
   }
 
   List _getStdNavList() =>
-      [...messages, ...questions, ...booleanQuestions, ...listQuestions];
+      [...messages!, ...questions!, ...booleanQuestions!, ...listQuestions!];
 
   List getCustomNavList() {
     var navList = [];
-    order.forEach((key) {
+    order!.forEach((key) {
       navList.add(_simpleSearch(key));
     });
     return navList;
   }
 
-  _questionType _getQuestionType(item) {
-    if (messages.contains(item)) {
+  _questionType? _getQuestionType(item) {
+    if (messages!.contains(item)) {
       return _questionType.message;
     }
-    if (questions.contains(item)) {
+    if (questions!.contains(item)) {
       return _questionType.question;
     }
-    if (booleanQuestions.contains(item)) {
+    if (booleanQuestions!.contains(item)) {
       return _questionType.booleanQuestion;
     }
-    if (listQuestions.contains(item)) {
+    if (listQuestions!.contains(item)) {
       return _questionType.listQuestion;
     }
     return null;
@@ -394,7 +395,7 @@ class CLI_Dialog {
         _navigationIndex < navlist.length;
         _navigationIndex++) {
       final element = navlist[_navigationIndex];
-      _getFunctionForQuestionType(_getQuestionType(element))(
+      _getFunctionForQuestionType(_getQuestionType(element))!(
           element[0], element[1]);
     }
   }
@@ -405,7 +406,7 @@ class CLI_Dialog {
     var messagesBefore = 0;
     if (navigationMode && order != null) {
       for (var i = _navigationIndex - 1; i >= 0; i--) {
-        if (_getQuestionType(_simpleSearch(order[i])) ==
+        if (_getQuestionType(_simpleSearch(order![i])) ==
             _questionType.message) {
           messagesBefore++;
         }
@@ -417,9 +418,7 @@ class CLI_Dialog {
   int _navigationIndex = 0;
 
   String _question(str) =>
-      (navigationMode != null && navigationMode
-          ? '(${_navigationIndex + 1 - _messagesBefore}) '
-          : '') +
+      (navigationMode ? '(${_navigationIndex + 1 - _messagesBefore}) ' : '') +
       XTerm.green('?') +
       ' ' +
       XTerm.bold(str) +
@@ -438,7 +437,7 @@ class CLI_Dialog {
   dynamic _simpleSearch(String key) {
     dynamic ret;
     [messages, questions, booleanQuestions, listQuestions].forEach((list) {
-      list.forEach((element) {
+      list!.forEach((element) {
         if (element[1] == key) {
           ret = element;
           return; // break
@@ -461,17 +460,17 @@ class CLI_Dialog {
   }
 
   void _standardOrderNoNavigation() {
-    for (var i = 0; i < messages.length; i++) {
-      _displayMessage(messages[i], messages[i][1]);
+    for (var i = 0; i < messages!.length; i++) {
+      _displayMessage(messages![i], messages![i][1]);
     }
-    for (var i = 0; i < questions.length; i++) {
-      _askQuestion(questions[i][0], questions[i][1]);
+    for (var i = 0; i < questions!.length; i++) {
+      _askQuestion(questions![i][0], questions![i][1]);
     }
-    for (var i = 0; i < booleanQuestions.length; i++) {
-      _askBooleanQuestion(booleanQuestions[i][0], booleanQuestions[i][1]);
+    for (var i = 0; i < booleanQuestions!.length; i++) {
+      _askBooleanQuestion(booleanQuestions![i][0], booleanQuestions![i][1]);
     }
-    for (var i = 0; i < listQuestions.length; i++) {
-      _askListQuestion(listQuestions[i][0], listQuestions[i][1]);
+    for (var i = 0; i < listQuestions!.length; i++) {
+      _askListQuestion(listQuestions![i][0], listQuestions![i][1]);
     }
   }
 }

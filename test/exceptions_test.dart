@@ -2,7 +2,7 @@ import 'package:test/test.dart';
 import 'package:cli_dialog/src/dialog.dart';
 
 Matcher getMatcher(msg) =>
-    throwsA(predicate((e) => e is ArgumentError && e.message == msg));
+    throwsA(predicate((dynamic e) => e is ArgumentError && e.message == msg));
 
 void main() {
   test('Each question entry must be a list consisting of a question and a key.',

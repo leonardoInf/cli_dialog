@@ -3,8 +3,8 @@ import 'package:test/test.dart';
 import 'test_utils.dart';
 
 void main() {
-  StdoutService std_output;
-  StdinService std_input;
+  late StdoutService std_output;
+  late StdinService std_input;
 
   setUp(() {
     std_output = StdoutService(mock: true);

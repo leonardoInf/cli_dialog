@@ -3,8 +3,8 @@ import 'package:cli_dialog/cli_dialog.dart';
 import 'test_utils.dart';
 
 void main() {
-  StdinService std_input;
-  StdoutService std_output;
+  late StdinService std_input;
+  late StdoutService std_output;
 
   setUp(() {
     std_output = StdoutService(mock: true);

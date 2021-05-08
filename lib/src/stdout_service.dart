@@ -54,15 +54,15 @@ class StdoutService {
   final _output = [''];
 
   void _addChar() {
-    var currLine = _output[_cursor['y']].split('');
-    if (_cursor['x'] < currLine.length) {
-      currLine.removeAt(_cursor['x']);
-      currLine.insert(_cursor['x'], _buffer[0]);
+    var currLine = _output[_cursor['y']!].split('');
+    if (_cursor['x']! < currLine.length) {
+      currLine.removeAt(_cursor['x']!);
+      currLine.insert(_cursor['x']!, _buffer[0]);
     } else {
       currLine.add(_buffer[0]);
     }
-    _output[_cursor['y']] = currLine.join('');
-    _cursor['x'] += 1;
+    _output[_cursor['y']!] = currLine.join('');
+    _cursor['x'] = _cursor['x']! + 1;
   }
 
   void _flush() {
@@ -113,15 +113,16 @@ class StdoutService {
 
     if (sequence == '[0K') {
       //blank remaning
-      _output[_cursor['y']] = _output[_cursor['y']].substring(0, _cursor['x']);
+      _output[_cursor['y']!] =
+          _output[_cursor['y']!].substring(0, _cursor['x']);
       return true;
     }
     if (RegExp(r'\[\dA').hasMatch(sequence)) {
       _cursor['x'] = 0;
       var stepsUp =
-          int.parse(RegExp(r'\[\dA').firstMatch(sequence).group(0)[1]);
-      if (_cursor['y'] - stepsUp >= 0) {
-        _cursor['y'] -= stepsUp;
+          int.parse(RegExp(r'\[\dA').firstMatch(sequence)!.group(0)![1]);
+      if (_cursor['y']! - stepsUp >= 0) {
+        _cursor['y'] = _cursor['y']! - stepsUp;
       }
       return true;
     }
@@ -131,7 +132,7 @@ class StdoutService {
   void _handleNewline() {
     _output.add('');
     _cursor['x'] = 0;
-    _cursor['y'] += 1;
+    _cursor['y'] = _cursor['y']! + 1;
   }
 
   void _removeCharFromBuffer() {

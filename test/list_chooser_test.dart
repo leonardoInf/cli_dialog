@@ -4,9 +4,9 @@ import 'package:cli_dialog/src/xterm.dart';
 import 'test_utils.dart';
 
 void main() {
-  StdinService std_input;
-  StdoutService std_output;
-  List<String> options;
+  late StdinService std_input;
+  late StdoutService std_output;
+  late List<String> options;
 
   setUp(() {
     std_input = StdinService(mock: true);
@@ -96,7 +96,7 @@ void main() {
   test('Throws exception if no option is given', () {
     expect(
         () => ListChooser.std(std_input, std_output, null),
-        throwsA(predicate((e) =>
+        throwsA(predicate((dynamic e) =>
             e is ArgumentError &&
             e.message == 'No options for list dialog given')));
   });

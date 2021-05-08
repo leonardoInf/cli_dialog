@@ -7,7 +7,7 @@ import 'keys.dart';
 /// Implementation of list questions. Can be used without [CLI_Dialog].
 class ListChooser {
   /// The options which are presented to the user
-  List<String> items;
+  List<String>? items;
 
   /// Select the navigation mode. See dialog.dart for details.
   bool navigationMode;
@@ -38,13 +38,13 @@ class ListChooser {
 
   /// Similar to [ask] this actually triggers the dialog and returns the chosen item = option.
   String choose() {
-    int input;
+    int? input;
     var index = 0;
 
     _renderList(0, initial: true);
 
     while ((input = _userInput()) != ENTER) {
-      if (input < 0) {
+      if (input! < 0) {
         _resetStdin();
         return ':${-input}';
       }
@@ -53,14 +53,14 @@ class ListChooser {
           index--;
         }
       } else if (input == ARROW_DOWN) {
-        if (index < items.length - 1) {
+        if (index < items!.length - 1) {
           index++;
         }
       }
       _renderList(index);
     }
     _resetStdin();
-    return items[index];
+    return items![index];
   }
 
   // END OF PUBLIC API
@@ -74,14 +74,14 @@ class ListChooser {
     }
   }
 
-  int _checkNavigation() {
+  int? _checkNavigation() {
     final input = _std_input.readByteSync();
     if (navigationMode) {
       if (input == 58) {
         // 58 = :
         _std_output.write(':');
         final inputLine =
-            _std_input.readLineSync(encoding: Encoding.getByName('utf-8'));
+            _std_input.readLineSync(encoding: Encoding.getByName('utf-8'))!;
         final lineNumber = int.parse(inputLine.trim());
         _std_output.writeln('$lineNumber');
         return -lineNumber; // make the result negative so it can be told apart from normal key codes
@@ -94,7 +94,7 @@ class ListChooser {
   }
 
   void _deletePreviousList() {
-    for (var i = 0; i < items.length; i++) {
+    for (var i = 0; i < items!.length; i++) {
       _std_output.write(XTerm.moveUp(1) + XTerm.blankRemaining());
     }
   }
@@ -103,13 +103,13 @@ class ListChooser {
     if (!initial) {
       _deletePreviousList();
     }
-    for (var i = 0; i < items.length; i++) {
+    for (var i = 0; i < items!.length; i++) {
       if (i == index) {
         _std_output
-            .writeln(XTerm.rightIndicator() + ' ' + XTerm.teal(items[i]));
+            .writeln(XTerm.rightIndicator() + ' ' + XTerm.teal(items![i]));
         continue;
       }
-      _std_output.writeln('  ' + items[i]);
+      _std_output.writeln('  ' + items![i]);
     }
   }
 
@@ -121,9 +121,9 @@ class ListChooser {
     }
   }
 
-  int _userInput() {
+  int? _userInput() {
     final navigationResult =
-        _checkNavigation(); // just receives the read byte, if not successful,
+        _checkNavigation()!; // just receives the read byte, if not successful,
     if (navigationResult < 0) {
       // < 0 = user has navigated
       return navigationResult;

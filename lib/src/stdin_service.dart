@@ -14,7 +14,7 @@ class StdinService {
 
   /// The stdout which should be informed if stdin is received in echoMode.
   /// echoMode means that you see that the user sees what he/her is typing. See [here](https://api.dart.dev/stable/2.7.2/dart-io/Stdin/echoMode.html).
-  StdoutService informStdout;
+  StdoutService? informStdout;
 
   /// The default and only constructor where you can optionally indicate
   /// whether you want [mock] stdin and [informStdout]
@@ -40,13 +40,13 @@ class StdinService {
   }
 
   /// Use this to read a byte, whether in  [mock] mode or with real stdin.
-  int readByteSync() {
+  int? readByteSync() {
     if (mock) {
       var ret = _mockBuffer[0];
       _mockBuffer.removeAt(0);
       return (ret is int ? ret : int.parse(ret));
     }
-    int key;
+    int? key;
     if (Platform.isWindows) {
       var key_input = console.readKey().toString();
       if (key_input.startsWith('ControlCharacter')) {
@@ -68,12 +68,12 @@ class StdinService {
   }
 
   /// Use this to read a whole line, whether in [mock] mode or with real stdin.
-  String readLineSync({encoding}) {
+  String? readLineSync({encoding}) {
     if (mock) {
       var ret = _mockBuffer[0];
       _mockBuffer.removeAt(0);
       if (informStdout != null && (_isTest || _getEchomode())) {
-        informStdout.write(ret);
+        informStdout!.write(ret);
       }
       return ret;
     }
